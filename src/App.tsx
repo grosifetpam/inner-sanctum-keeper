@@ -2,24 +2,96 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { SystemProvider, useSystem } from "@/contexts/SystemContext";
+import PublicLayout from "@/components/PublicLayout";
+import AdminLayout from "@/components/AdminLayout";
+
 import Index from "./pages/Index";
+import SystemPage from "./pages/SystemPage";
+import AltersPage from "./pages/AltersPage";
+import JournalPage from "./pages/JournalPage";
+import InnerWorldPage from "./pages/InnerWorldPage";
+import CitationsPage from "./pages/CitationsPage";
+import ResourcesPage from "./pages/ResourcesPage";
+import TimelinePage from "./pages/TimelinePage";
+import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageAlters from "./pages/admin/ManageAlters";
+import ManageJournal from "./pages/admin/ManageJournal";
+import ManageCitations from "./pages/admin/ManageCitations";
+import ManageResources from "./pages/admin/ManageResources";
+import ManageInnerWorld from "./pages/admin/ManageInnerWorld";
+import ManageTimeline from "./pages/admin/ManageTimeline";
+import ManageMood from "./pages/admin/ManageMood";
+import ManageFront from "./pages/admin/ManageFront";
+import ManageRelations from "./pages/admin/ManageRelations";
+import ManageSystem from "./pages/admin/ManageSystem";
+
 const queryClient = new QueryClient();
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isFirstSetup } = useSystem();
+  if (!isAuthenticated || isFirstSetup) return <Navigate to="/login" replace />;
+  return <AdminLayout>{children}</AdminLayout>;
+}
+
+function LoginRoute() {
+  const { isAuthenticated, isFirstSetup } = useSystem();
+  if (isAuthenticated && !isFirstSetup) return <Navigate to="/admin" replace />;
+  return <LoginPage />;
+}
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  return <PublicLayout>{children}</PublicLayout>;
+}
+
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<PublicRoute><Index /></PublicRoute>} />
+        <Route path="/systeme" element={<PublicRoute><SystemPage /></PublicRoute>} />
+        <Route path="/alters" element={<PublicRoute><AltersPage /></PublicRoute>} />
+        <Route path="/journal" element={<PublicRoute><JournalPage /></PublicRoute>} />
+        <Route path="/monde-interieur" element={<PublicRoute><InnerWorldPage /></PublicRoute>} />
+        <Route path="/citations" element={<PublicRoute><CitationsPage /></PublicRoute>} />
+        <Route path="/ressources" element={<PublicRoute><ResourcesPage /></PublicRoute>} />
+        <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
+
+        {/* Auth */}
+        <Route path="/login" element={<LoginRoute />} />
+
+        {/* Admin */}
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/alters" element={<ProtectedRoute><ManageAlters /></ProtectedRoute>} />
+        <Route path="/admin/journal" element={<ProtectedRoute><ManageJournal /></ProtectedRoute>} />
+        <Route path="/admin/citations" element={<ProtectedRoute><ManageCitations /></ProtectedRoute>} />
+        <Route path="/admin/ressources" element={<ProtectedRoute><ManageResources /></ProtectedRoute>} />
+        <Route path="/admin/monde" element={<ProtectedRoute><ManageInnerWorld /></ProtectedRoute>} />
+        <Route path="/admin/chronologie" element={<ProtectedRoute><ManageTimeline /></ProtectedRoute>} />
+        <Route path="/admin/humeur" element={<ProtectedRoute><ManageMood /></ProtectedRoute>} />
+        <Route path="/admin/front" element={<ProtectedRoute><ManageFront /></ProtectedRoute>} />
+        <Route path="/admin/relations" element={<ProtectedRoute><ManageRelations /></ProtectedRoute>} />
+        <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SystemProvider>
+        <AppRoutes />
+      </SystemProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
