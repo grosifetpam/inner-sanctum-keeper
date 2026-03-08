@@ -119,8 +119,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </motion.aside>
 
         {/* Mobile header */}
-        <div className="flex-1 flex flex-col">
-          <header className="md:hidden border-b border-border grimoire-spine p-3">
+        <div className="flex-1 flex flex-col grimoire-page-panel">
+          <header className="md:hidden border-b border-gold/10 p-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <BookOpenCheck className="w-4 h-4 text-gold" />
