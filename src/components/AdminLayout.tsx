@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
+import { playPageTurn } from '@/lib/sounds';
 import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -31,6 +32,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const { logout } = useSystem();
   const location = useLocation();
   const navigate = useNavigate();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    playPageTurn();
+  }, [location.pathname]);
 
   const handleLogout = () => { logout(); navigate('/'); };
 

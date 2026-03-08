@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Shield, Brain, BookOpenCheck } from 'lucide-react';
+import { playPageTurn } from '@/lib/sounds';
 
 const navItems = [
   { path: '/', label: 'Accueil', icon: Moon },
@@ -17,6 +18,15 @@ const navItems = [
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    playPageTurn();
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen relative">
