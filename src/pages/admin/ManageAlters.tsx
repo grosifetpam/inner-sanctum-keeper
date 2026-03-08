@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import type { Alter, AlterRole } from '@/types/system';
-import { Plus, Trash2, Edit2, X, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Eye, EyeOff, Upload, Image as ImageIcon } from 'lucide-react';
 
 const roleTypes: AlterRole[] = ['hôte', 'protecteur', 'persécuteur', 'gardien', 'observateur', 'trauma holder', 'autre'];
 
@@ -14,6 +14,7 @@ export default function ManageAlters() {
   const { data, addAlter, updateAlter, deleteAlter } = useSystem();
   const [editing, setEditing] = useState<Alter | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const startNew = () => {
     setEditing({ id: crypto.randomUUID(), ...emptyAlter });
@@ -30,6 +31,20 @@ export default function ManageAlters() {
     if (isNew) addAlter(editing);
     else updateAlter(editing);
     setEditing(null);
+  };
+
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editing) return;
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 5 * 1024 * 1024) return; // 5MB limit
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target?.result as string;
+      setEditing(prev => prev ? { ...prev, avatar: dataUrl } : null);
+    };
+    reader.readAsDataURL(file);
   };
 
   const field = (label: string, key: keyof Alter, textarea = false) => (
@@ -66,6 +81,35 @@ export default function ManageAlters() {
             <h2 className="font-display text-foreground">{isNew ? 'Nouvel alter' : 'Modifier'}</h2>
             <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
           </div>
+
+          {/* Avatar upload section */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="relative group">
+              <div className="w-20 h-20 rounded-full overflow-hidden bg-card border-2 border-border flex items-center justify-center">
+                {editing.avatar ? (
+                  <img src={editing.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                )}
+              </div>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              >
+                <Upload className="w-5 h-5 text-foreground" />
+              </button>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+            </div>
+            <div>
+              <p className="text-sm font-ui text-foreground">Avatar</p>
+              <p className="text-xs text-muted-foreground">Cliquer pour uploader (max 5 Mo)</p>
+              {editing.avatar && (
+                <button onClick={() => setEditing(prev => prev ? { ...prev, avatar: '' } : null)}
+                  className="text-xs text-destructive hover:underline mt-1">Supprimer l'avatar</button>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {field('Nom', 'name')}
             {field('Pronoms', 'pronouns')}
@@ -106,8 +150,12 @@ export default function ManageAlters() {
         {data.alters.map(a => (
           <div key={a.id} className="card-grimoire p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-display text-sm text-primary">
-                {a.name[0]}
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center font-display text-sm text-primary">
+                {a.avatar ? (
+                  <img src={a.avatar} alt={a.name} className="w-full h-full object-cover" />
+                ) : (
+                  a.name[0]
+                )}
               </div>
               <div>
                 <p className="text-sm font-ui text-foreground">{a.name}</p>
