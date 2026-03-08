@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
 import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { AdminPageHeader, containerVariants, itemVariants, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
 
 const shortcuts = [
   { path: '/admin/alters', label: 'Gérer les alters', icon: Users, desc: 'Ajouter, modifier, supprimer' },
@@ -16,17 +17,12 @@ const shortcuts = [
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings, desc: 'Infos du système' },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
+const statVariants = {
+  hidden: { opacity: 0, scale: 0.8, rotateX: -20 },
+  visible: (i: number) => ({
+    opacity: 1, scale: 1, rotateX: 0,
+    transition: { delay: 0.2 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  }),
 };
 
 export default function AdminDashboard() {
@@ -41,68 +37,62 @@ export default function AdminDashboard() {
 
   return (
     <div className="relative">
-      {/* Floating particles */}
-      {[...Array(5)].map((_, i) => (
+      {/* Floating ember particles */}
+      {[...Array(6)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 rounded-full bg-primary/30 pointer-events-none"
-          style={{ left: `${15 + i * 18}%`, top: `${10 + i * 12}%` }}
+          className="absolute w-1 h-1 rounded-full pointer-events-none"
+          style={{
+            left: `${12 + i * 16}%`,
+            top: `${5 + i * 10}%`,
+            background: i % 2 === 0 ? 'hsla(40, 70%, 50%, 0.3)' : 'hsla(350, 60%, 45%, 0.25)',
+          }}
           animate={{
-            y: [0, -20, 0],
-            opacity: [0.2, 0.6, 0.2],
+            y: [0, -25, 0],
+            opacity: [0.15, 0.5, 0.15],
+            scale: [1, 1.5, 1],
           }}
           transition={{
-            duration: 3 + i * 0.5,
+            duration: 3.5 + i * 0.7,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: i * 0.4,
+            delay: i * 0.5,
           }}
         />
       ))}
 
-      {/* Title */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex items-center gap-3 mb-8"
-      >
-        <motion.div
-          animate={{ rotate: [0, 10, -10, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <Sparkles className="w-6 h-6 text-primary" />
-        </motion.div>
-        <h1 className="text-2xl font-display text-foreground text-glow">Tableau de bord</h1>
-      </motion.div>
+      <AdminPageHeader title="Tableau de bord" icon={Sparkles} />
 
-      {/* Stats */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8"
-      >
+      {/* Stats — grimoire page sections */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8" style={{ perspective: '600px' }}>
         {stats.map((stat, i) => (
           <motion.div
             key={i}
-            variants={itemVariants}
-            whileHover={{ scale: 1.03, y: -2 }}
-            className="card-grimoire p-4 text-center relative overflow-hidden group"
+            custom={i}
+            variants={statVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="card-grimoire p-4 text-center hover-ember"
           >
-            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <p className={`${stat.accent ? 'text-lg' : 'text-2xl'} font-display text-foreground relative z-10`}>
+            <p className={`${stat.accent ? 'text-lg' : 'text-2xl'} font-display text-foreground`}>
               {stat.value}
             </p>
-            <p className="text-xs font-ui text-muted-foreground relative z-10">{stat.label}</p>
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.6 }}
-            />
+            <p className="text-xs font-ui text-muted-foreground">{stat.label}</p>
           </motion.div>
         ))}
+      </div>
+
+      {/* Ornamental divider */}
+      <motion.div
+        className="mb-6 flex items-center gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        <div className="flex-1 divider-ornate" />
+        <span className="text-[10px] text-gold/40 font-display tracking-widest">CHAPITRES</span>
+        <div className="flex-1 divider-ornate" />
       </motion.div>
 
       {/* Shortcut grid */}
@@ -112,30 +102,24 @@ export default function AdminDashboard() {
         animate="visible"
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
       >
-        {shortcuts.map((s, i) => (
+        {shortcuts.map((s) => (
           <motion.div key={s.path} variants={itemVariants}>
             <Link
               to={s.path}
-              className="card-grimoire p-4 flex items-center gap-3 group relative overflow-hidden block transition-all duration-300 hover:border-primary/30"
+              className="card-grimoire p-4 flex items-center gap-3 group relative overflow-hidden block transition-all duration-300 hover:border-primary/30 hover-ember"
             >
-              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <motion.div
-                whileHover={{ rotate: 12, scale: 1.15 }}
+                whileHover={{ rotate: 15, scale: 1.2 }}
                 transition={{ type: 'spring', stiffness: 300 }}
                 className="relative z-10"
               >
-                <s.icon className="w-5 h-5 text-primary flex-shrink-0" />
+                <s.icon className="w-5 h-5 text-gold flex-shrink-0" />
               </motion.div>
               <div className="relative z-10">
                 <h3 className="text-sm font-ui text-foreground">{s.label}</h3>
                 <p className="text-xs text-muted-foreground">{s.desc}</p>
               </div>
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3 }}
-              />
             </Link>
           </motion.div>
         ))}
