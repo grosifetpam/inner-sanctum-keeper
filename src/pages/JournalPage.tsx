@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import { motion } from 'framer-motion';
+import { BookOpen } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,19 +27,13 @@ export default function JournalPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-8">
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Journal</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-      </motion.div>
+      <PageHeader title="Journal" subtitle="Les pages inscrites dans ce grimoire" icon={BookOpen} chapter="Chapitre II" />
 
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-6">
         <select
           value={filterAlterId}
           onChange={e => setFilterAlterId(e.target.value)}
-          className="bg-input border border-border rounded px-3 py-2 text-sm font-ui text-foreground"
+          className="bg-card/60 backdrop-blur-sm border border-border/30 rounded px-3 py-2 text-sm font-ui text-foreground focus:border-gold/30 focus:ring-1 focus:ring-gold/20 transition-colors"
         >
           <option value="all">Tous les alters</option>
           {publicAlters.map(a => (
@@ -47,8 +43,11 @@ export default function JournalPage() {
       </motion.div>
 
       <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
-        {publicEntries.map(entry => (
-          <motion.div key={entry.id} variants={itemVariants} whileHover={{ x: 6, transition: { duration: 0.2 } }} className="card-grimoire p-6 hover-ember">
+        {publicEntries.map((entry, i) => (
+          <motion.div key={entry.id} variants={itemVariants} whileHover={{ x: 6, transition: { duration: 0.2 } }} className="card-grimoire rune-corners p-6 hover-ember relative">
+            {/* Page number decoration */}
+            <div className="absolute top-3 right-4 text-[8px] font-display text-gold/15">{i + 1}</div>
+            
             <div className="flex items-center justify-between mb-2">
               <h2 className="font-display text-lg text-foreground">{entry.title}</h2>
               <span className="text-xs font-ui text-muted-foreground">{entry.date}</span>
@@ -56,7 +55,7 @@ export default function JournalPage() {
             <p className="text-xs font-ui text-gold mb-3">Par {getAlterName(entry.alterId)}</p>
             <p className="font-body text-foreground/80 leading-relaxed whitespace-pre-wrap">{entry.content}</p>
             {entry.tags.length > 0 && (
-              <div className="flex gap-2 mt-3">
+              <div className="flex flex-wrap gap-2 mt-3">
                 {entry.tags.map(tag => (
                   <span key={tag} className="text-xs font-ui bg-accent/30 text-accent-foreground px-2 py-0.5 rounded">#{tag}</span>
                 ))}
@@ -65,7 +64,10 @@ export default function JournalPage() {
           </motion.div>
         ))}
         {publicEntries.length === 0 && (
-          <p className="text-center text-muted-foreground font-body py-12">Aucune entrée pour le moment.</p>
+          <div className="text-center py-12">
+            <BookOpen className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+            <p className="text-muted-foreground font-body italic">Les pages de ce chapitre sont encore vierges…</p>
+          </div>
         )}
       </motion.div>
     </div>
