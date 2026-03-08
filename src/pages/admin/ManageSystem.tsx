@@ -3,6 +3,7 @@ import { useSystem } from '@/contexts/SystemContext';
 import { Settings, Upload, X, Image } from 'lucide-react';
 import { AdminPageHeader, AdminFormCard } from '@/components/admin/AdminPageWrapper';
 import { uploadImage, deleteImage } from '@/lib/storage';
+import { toast } from 'sonner';
 
 export default function ManageSystem() {
   const { data, updateSystemInfo, user } = useSystem();
@@ -10,7 +11,15 @@ export default function ManageSystem() {
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const save = () => { updateSystemInfo(form); };
+  const save = async () => {
+    try {
+      await updateSystemInfo(form);
+      toast.success('Paramètres sauvegardés');
+    } catch (e) {
+      console.error('Save error:', e);
+      toast.error('Erreur lors de la sauvegarde');
+    }
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
