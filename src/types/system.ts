@@ -86,6 +86,14 @@ export interface AlterRelation {
   type: 'allié' | 'protecteur' | 'conflit' | 'influence' | 'famille interne';
 }
 
+export interface LexiconEntry {
+  id: string;
+  term: string;
+  definition: string;
+  category: string;
+  isPublic: boolean;
+}
+
 export interface SystemInfo {
   name: string;
   description: string;
@@ -105,5 +113,6 @@ export interface SystemData {
   innerWorld: InnerWorldPlace[];
   timeline: TimelineEvent[];
   relations: AlterRelation[];
+  lexicon: LexiconEntry[];
   adminPassword: string;
 }
