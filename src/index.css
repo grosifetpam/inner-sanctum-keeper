@@ -94,10 +94,41 @@
   .text-glow {
     text-shadow: 0 0 20px hsla(350, 60%, 45%, 0.4), 0 0 40px hsla(270, 30%, 25%, 0.2);
   }
+
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE CARD — parchment feel with ornamental corners
+     ═══════════════════════════════════════════════ */
   .card-grimoire {
-    @apply bg-card/80 backdrop-blur-sm border border-border rounded-lg;
+    @apply bg-card/80 backdrop-blur-sm border border-border rounded-lg relative;
     box-shadow: 0 4px 30px hsla(270, 30%, 10%, 0.5), inset 0 1px 0 hsla(40, 70%, 50%, 0.05);
   }
+  .card-grimoire::before,
+  .card-grimoire::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: hsla(40, 70%, 50%, 0.2);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .card-grimoire::before {
+    top: 4px;
+    left: 4px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-color: inherit;
+    border-color: hsla(40, 70%, 50%, 0.2);
+  }
+  .card-grimoire::after {
+    bottom: 4px;
+    right: 4px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    border-color: inherit;
+    border-color: hsla(40, 70%, 50%, 0.2);
+  }
+
   .btn-grimoire {
     @apply bg-primary/90 text-primary-foreground font-display tracking-wider uppercase text-sm px-6 py-3 rounded transition-all duration-300;
     box-shadow: 0 0 15px hsla(350, 60%, 45%, 0.3);
@@ -120,5 +151,198 @@
   .scrollbar-dark::-webkit-scrollbar-thumb {
     background: hsl(var(--border));
     border-radius: 3px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE SPINE — book spine sidebar
+     ═══════════════════════════════════════════════ */
+  .grimoire-spine {
+    background: linear-gradient(
+      180deg,
+      hsla(240, 10%, 8%, 1) 0%,
+      hsla(270, 15%, 10%, 1) 50%,
+      hsla(240, 10%, 7%, 1) 100%
+    );
+    border-right: 2px solid hsla(40, 70%, 50%, 0.15);
+    position: relative;
+  }
+  .grimoire-spine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 6px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsla(40, 70%, 50%, 0.08) 20%,
+      hsla(40, 70%, 50%, 0.12) 50%,
+      hsla(40, 70%, 50%, 0.08) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE PAGE — main content area
+     ═══════════════════════════════════════════════ */
+  .grimoire-page {
+    background: linear-gradient(
+      135deg,
+      hsla(240, 10%, 7%, 1) 0%,
+      hsla(240, 8%, 8%, 1) 50%,
+      hsla(270, 10%, 8%, 1) 100%
+    );
+    position: relative;
+  }
+  .grimoire-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.15), transparent);
+  }
+  .grimoire-page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.1), transparent);
+  }
+
+  /* ═══════════════════════════════════════════════
+     ORNAMENTAL CORNER BORDERS (for larger panels)
+     ═══════════════════════════════════════════════ */
+  .grimoire-corners {
+    position: relative;
+  }
+  .grimoire-corners::before {
+    content: '✦';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: hsla(40, 70%, 50%, 0.3);
+    font-size: 8px;
+    letter-spacing: 4px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE NAV LINK
+     ═══════════════════════════════════════════════ */
+  .grimoire-nav-link {
+    position: relative;
+    overflow: hidden;
+  }
+  .grimoire-nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 60%;
+    border-left: 2px solid hsl(var(--primary));
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .grimoire-nav-link.active::before {
+    opacity: 1;
+  }
+
+  /* ═══════════════════════════════════════════════
+     QUILL WRITE — text reveal animation
+     ═══════════════════════════════════════════════ */
+  @keyframes quill-reveal {
+    from {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+    }
+    to {
+      clip-path: inset(0 0% 0 0);
+      opacity: 1;
+    }
+  }
+  .animate-quill {
+    animation: quill-reveal 0.8s ease-out forwards;
+  }
+
+  /* ═══════════════════════════════════════════════
+     PAGE UNFURL — scroll/page opening animation
+     ═══════════════════════════════════════════════ */
+  @keyframes page-unfurl {
+    from {
+      opacity: 0;
+      transform: perspective(800px) rotateY(-8deg) scale(0.95);
+      transform-origin: left center;
+    }
+    to {
+      opacity: 1;
+      transform: perspective(800px) rotateY(0deg) scale(1);
+      transform-origin: left center;
+    }
+  }
+  .animate-page-unfurl {
+    animation: page-unfurl 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* ═══════════════════════════════════════════════
+     SEAL STAMP — form card opening
+     ═══════════════════════════════════════════════ */
+  @keyframes seal-break {
+    0% {
+      opacity: 0;
+      transform: scaleY(0.1) scaleX(0.8);
+      transform-origin: top center;
+    }
+    40% {
+      opacity: 1;
+      transform: scaleY(1.02) scaleX(1.01);
+    }
+    100% {
+      transform: scaleY(1) scaleX(1);
+    }
+  }
+  .animate-seal-break {
+    animation: seal-break 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* ═══════════════════════════════════════════════
+     INK SPREAD — item appear animation
+     ═══════════════════════════════════════════════ */
+  @keyframes ink-spread {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+      filter: blur(0);
+    }
+  }
+  .animate-ink-spread {
+    animation: ink-spread 0.4s ease-out forwards;
+  }
+
+  /* ═══════════════════════════════════════════════
+     EMBER GLOW — subtle pulsing on interactive cards
+     ═══════════════════════════════════════════════ */
+  @keyframes ember-glow {
+    0%, 100% {
+      box-shadow: 0 4px 30px hsla(270, 30%, 10%, 0.5), inset 0 1px 0 hsla(40, 70%, 50%, 0.05);
+    }
+    50% {
+      box-shadow: 0 4px 30px hsla(350, 60%, 20%, 0.3), inset 0 1px 0 hsla(40, 70%, 50%, 0.1);
+    }
+  }
+  .hover-ember:hover {
+    animation: ember-glow 2s ease-in-out infinite;
   }
 }

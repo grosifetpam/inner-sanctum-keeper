@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain } from 'lucide-react';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const adminNav = [
   { path: '/admin', label: 'Tableau de bord', icon: Home },
@@ -18,40 +19,72 @@ const adminNav = [
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings },
 ];
 
+const sidebarItemVariants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: (i: number) => ({
+    opacity: 1, x: 0,
+    transition: { delay: 0.3 + i * 0.04, duration: 0.3, ease: 'easeOut' as const },
+  }),
+};
+
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { logout } = useSystem();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleLogout = () => { logout(); navigate('/'); };
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-60 border-r border-border bg-card/50 backdrop-blur-sm">
-        <div className="p-4 border-b border-border">
-          <h2 className="font-display text-primary tracking-widest text-sm">ADMIN</h2>
-        </div>
-        <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto scrollbar-dark">
-          {adminNav.map(item => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center gap-2.5 px-3 py-2 text-sm font-ui rounded transition-colors ${
-                location.pathname === item.path
-                  ? 'text-primary bg-primary/10'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-              }`}
+      {/* Grimoire Spine — Sidebar */}
+      <motion.aside
+        initial={{ x: -60, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="hidden md:flex flex-col w-60 grimoire-spine"
+      >
+        {/* Book title plate */}
+        <div className="p-4 border-b border-border relative">
+          <div className="flex items-center gap-2">
+            <motion.div
+              animate={{ rotateY: [0, 180, 360] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <item.icon className="w-4 h-4" />
-              {item.label}
-            </Link>
+              <BookOpenCheck className="w-4 h-4 text-gold" />
+            </motion.div>
+            <h2 className="font-display text-gold tracking-[0.3em] text-xs">GRIMOIRE</h2>
+          </div>
+          <div className="divider-ornate mt-3" />
+        </div>
+
+        {/* Navigation chapters */}
+        <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto scrollbar-dark">
+          {adminNav.map((item, i) => (
+            <motion.div
+              key={item.path}
+              custom={i}
+              variants={sidebarItemVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <Link
+                to={item.path}
+                className={`grimoire-nav-link flex items-center gap-2.5 px-3 py-2 text-sm font-ui rounded transition-all duration-300 ${
+                  location.pathname === item.path
+                    ? 'active text-primary bg-primary/10 shadow-[inset_0_0_20px_hsla(350,60%,45%,0.08)]'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/30 hover:pl-4'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.label}
+              </Link>
+            </motion.div>
           ))}
         </nav>
+
+        {/* Book back cover */}
         <div className="p-2 border-t border-border">
+          <div className="divider-ornate mb-2" />
           <Link to="/" className="flex items-center gap-2.5 px-3 py-2 text-sm font-ui text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted/30">
             <Home className="w-4 h-4" /> Voir le site
           </Link>
@@ -59,18 +92,22 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <LogOut className="w-4 h-4" /> Déconnexion
           </button>
         </div>
-      </aside>
+      </motion.aside>
 
       {/* Mobile header */}
       <div className="flex-1 flex flex-col">
-        <header className="md:hidden border-b border-border bg-card/50 backdrop-blur-sm p-3">
+        <header className="md:hidden border-b border-border grimoire-spine p-3">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-display text-primary tracking-widest text-sm">ADMIN</h2>
+            <div className="flex items-center gap-2">
+              <BookOpenCheck className="w-4 h-4 text-gold" />
+              <h2 className="font-display text-gold tracking-[0.3em] text-xs">GRIMOIRE</h2>
+            </div>
             <div className="flex gap-2">
               <Link to="/" className="text-muted-foreground hover:text-foreground"><Home className="w-4 h-4" /></Link>
               <button onClick={handleLogout} className="text-destructive"><LogOut className="w-4 h-4" /></button>
             </div>
           </div>
+          <div className="divider-ornate mb-2" />
           <div className="flex overflow-x-auto gap-1 scrollbar-dark">
             {adminNav.map(item => (
               <Link
@@ -89,8 +126,21 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto">
-          {children}
+        {/* Grimoire page — main content */}
+        <main className="flex-1 grimoire-page overflow-y-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, rotateY: -6, scale: 0.97 }}
+              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+              exit={{ opacity: 0, rotateY: 4, scale: 0.98 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              style={{ perspective: '1000px', transformOrigin: 'left center' }}
+              className="p-4 md:p-8 min-h-full"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>
