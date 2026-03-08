@@ -17,6 +17,7 @@ import ResourcesPage from "./pages/ResourcesPage";
 import TimelinePage from "./pages/TimelinePage";
 import CartographyPage from "./pages/CartographyPage";
 import LoginPage from "./pages/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -69,6 +70,7 @@ function AppRoutes() {
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* Admin */}
         <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />

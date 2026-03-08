@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Lock, Mail, KeyRound, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -11,6 +12,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [isSignup, setIsSignup] = useState(false);
+  const [isForgot, setIsForgot] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -19,6 +21,15 @@ export default function LoginPage() {
     setError('');
     setMessage('');
     setLoading(true);
+
+    if (isForgot) {
+      const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (err) { setError(err.message); } else { setMessage('Un lien de réinitialisation a été envoyé à votre email.'); }
+      setLoading(false);
+      return;
+    }
 
     if (isSignup) {
       if (password.length < 6) { setError('Minimum 6 caractères'); setLoading(false); return; }
@@ -95,17 +106,17 @@ export default function LoginPage() {
 
             <AnimatePresence mode="wait">
               <motion.div
-                key={isSignup ? 'signup' : 'login'}
+                key={isForgot ? 'forgot' : isSignup ? 'signup' : 'login'}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.3 }}
               >
                 <h1 className="font-display text-2xl text-foreground text-glow tracking-wide">
-                  {isSignup ? 'Créer un compte' : 'Sanctuaire'}
+                  {isForgot ? 'Mot de passe oublié' : isSignup ? 'Créer un compte' : 'Sanctuaire'}
                 </h1>
                 <p className="text-sm text-muted-foreground font-body mt-2 italic">
-                  {isSignup ? 'Forgez votre accès au grimoire' : 'Entrez dans les ombres du grimoire'}
+                  {isForgot ? 'Recevez un lien de réinitialisation' : isSignup ? 'Forgez votre accès au grimoire' : 'Entrez dans les ombres du grimoire'}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -136,29 +147,41 @@ export default function LoginPage() {
             </div>
 
             {/* Mot de passe */}
-            <div className="group relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Mot de passe"
-                value={password}
-                onChange={e => { setPassword(e.target.value); setError(''); }}
-                className="w-full bg-input/60 border border-border rounded-md px-3.5 py-3 pl-11 pr-11 text-sm font-ui text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring transition-all duration-300 focus:bg-input/80"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
+            <AnimatePresence>
+              {!isForgot && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="group relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Mot de passe"
+                      value={password}
+                      onChange={e => { setPassword(e.target.value); setError(''); }}
+                      className="w-full bg-input/60 border border-border rounded-md px-3.5 py-3 pl-11 pr-11 text-sm font-ui text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring transition-all duration-300 focus:bg-input/80"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Confirmation mot de passe */}
             <AnimatePresence>
-              {isSignup && (
+              {isSignup && !isForgot && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
@@ -222,22 +245,37 @@ export default function LoginPage() {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  {isSignup ? 'Forger le compte' : 'Entrer'}
+                  {isForgot ? 'Envoyer le lien' : isSignup ? 'Forger le compte' : 'Entrer'}
                 </>
               )}
             </motion.button>
+
+            {/* Mot de passe oublié */}
+            {!isSignup && !isForgot && (
+              <motion.button
+                type="button"
+                onClick={() => { setIsForgot(true); setError(''); setMessage(''); }}
+                className="w-full text-center text-xs text-muted-foreground hover:text-primary font-ui transition-colors duration-300"
+                whileHover={{ scale: 1.02 }}
+              >
+                Mot de passe oublié ?
+              </motion.button>
+            )}
           </motion.form>
 
           {/* Séparateur */}
           <div className="divider-ornate mt-8 mb-5 opacity-40" />
 
-          {/* Toggle signup/login */}
+          {/* Toggle signup/login/forgot */}
           <motion.button
-            onClick={() => { setIsSignup(!isSignup); setError(''); setMessage(''); }}
+            onClick={() => { 
+              if (isForgot) { setIsForgot(false); } else { setIsSignup(!isSignup); }
+              setError(''); setMessage(''); 
+            }}
             className="w-full text-center text-xs text-muted-foreground hover:text-foreground font-ui transition-colors duration-300"
             whileHover={{ scale: 1.02 }}
           >
-            {isSignup ? 'Déjà un compte ? Entrer dans le sanctuaire' : 'Pas de compte ? Forger un accès'}
+            {isForgot ? '← Retour à la connexion' : isSignup ? 'Déjà un compte ? Entrer dans le sanctuaire' : 'Pas de compte ? Forger un accès'}
           </motion.button>
 
           {/* Lueur décorative en bas */}
