@@ -1,0 +1,1 @@
+ALTER TABLE public.system_info ADD COLUMN homepage_image TEXT DEFAULT '';
