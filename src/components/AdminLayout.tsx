@@ -148,7 +148,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 grimoire-page overflow-y-auto">
+          <main className="flex-1 grimoire-page-panel overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
@@ -164,6 +164,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </AnimatePresence>
           </main>
         </div>
+          </div>
+        </motion.div>
       </div>
     </GrimoireOpening>
   );
