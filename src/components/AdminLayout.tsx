@@ -48,13 +48,25 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <GrimoireOpening storageKey="grimoire-admin-opened" title="GRIMOIRE" subtitle="Administration" icon="settings">
-      <div className="min-h-screen bg-background flex">
+      <div className="min-h-screen relative flex flex-col">
+        {/* Background */}
+        <div className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0" style={{ backgroundImage: "url('/images/bg-main.png')" }} />
+        <div className="fixed inset-0 bg-overlay z-0" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="relative z-10 flex-1 flex items-start justify-center px-2 sm:px-4 py-4 md:py-8"
+        >
+          <div className="w-full max-w-7xl flex flex-col md:flex-row grimoire-book">
+
         {/* Grimoire Spine — Sidebar */}
         <motion.aside
           initial={{ x: -60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="hidden md:flex flex-col w-60 grimoire-spine"
+          className="hidden md:flex flex-col w-60 grimoire-spine-panel"
         >
           <div className="p-4 border-b border-border relative">
             <div className="flex items-center gap-2">
