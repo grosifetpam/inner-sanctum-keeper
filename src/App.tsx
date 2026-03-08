@@ -15,6 +15,7 @@ import InnerWorldPage from "./pages/InnerWorldPage";
 import CitationsPage from "./pages/CitationsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import TimelinePage from "./pages/TimelinePage";
+import CartographyPage from "./pages/CartographyPage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
@@ -62,6 +63,7 @@ function AppRoutes() {
         <Route path="/citations" element={<PublicRoute><CitationsPage /></PublicRoute>} />
         <Route path="/ressources" element={<PublicRoute><ResourcesPage /></PublicRoute>} />
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
+        <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />

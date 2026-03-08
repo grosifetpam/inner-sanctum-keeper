@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Shield } from 'lucide-react';
+import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Shield, Brain } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Accueil', icon: Moon },
@@ -12,6 +12,7 @@ const navItems = [
   { path: '/citations', label: 'Citations', icon: Quote },
   { path: '/ressources', label: 'Ressources', icon: Library },
   { path: '/chronologie', label: 'Chronologie', icon: Clock },
+  { path: '/cartographie', label: 'Cartographie', icon: Brain },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
