@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { SystemData, Alter, JournalEntry, MoodEntry, FrontEntry, Citation, Resource, InnerWorldPlace, TimelineEvent, AlterRelation, AlterRole } from '@/types/system';
+import type { SystemData, Alter, JournalEntry, MoodEntry, FrontEntry, Citation, Resource, InnerWorldPlace, TimelineEvent, AlterRelation, AlterRole, LexiconEntry } from '@/types/system';
 import type { User } from '@supabase/supabase-js';
 
 const emptyData: SystemData = {
   systemInfo: { name: '', description: '', currentFrontAlterId: '', moodOfDay: '', homepageImage: '' },
   alters: [], journal: [], moods: [], frontHistory: [], citations: [],
-  resources: [], innerWorld: [], timeline: [], relations: [], adminPassword: '',
+  resources: [], innerWorld: [], timeline: [], relations: [], lexicon: [], adminPassword: '',
 };
 
 interface SystemContextType {
@@ -38,6 +38,9 @@ interface SystemContextType {
   deleteTimelineEvent: (id: string) => void;
   addRelation: (relation: AlterRelation) => void;
   deleteRelation: (id: string) => void;
+  addLexiconEntry: (entry: LexiconEntry) => void;
+  updateLexiconEntry: (entry: LexiconEntry) => void;
+  deleteLexiconEntry: (id: string) => void;
   getAlterName: (id: string) => string;
   refreshData: () => Promise<void>;
 }
