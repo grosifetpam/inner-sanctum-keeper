@@ -23,19 +23,24 @@ export default function InnerWorldPage() {
             key={place.id}
             whileHover={{ y: -4 }}
             onClick={() => setSelectedPlace(place)}
-            className="card-grimoire p-5 cursor-pointer hover:border-primary/30 transition-all"
+            className="card-grimoire overflow-hidden cursor-pointer hover:border-primary/30 transition-all"
           >
-            <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="font-display text-foreground mb-1">{place.name}</h3>
-                <p className="text-sm font-body text-foreground/60 line-clamp-2">{place.description}</p>
-                <div className="flex gap-1 mt-2">
-                  {place.linkedAlterIds.map(id => (
-                    <span key={id} className="text-xs font-ui bg-primary/10 text-primary px-2 py-0.5 rounded">
-                      {getAlterName(id)}
-                    </span>
-                  ))}
+            {place.image && (
+              <img src={place.image} alt={place.name} className="w-full h-40 object-cover" />
+            )}
+            <div className="p-5">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-display text-foreground mb-1">{place.name}</h3>
+                  <p className="text-sm font-body text-foreground/60 line-clamp-2">{place.description}</p>
+                  <div className="flex gap-1 mt-2">
+                    {place.linkedAlterIds.map(id => (
+                      <span key={id} className="text-xs font-ui bg-primary/10 text-primary px-2 py-0.5 rounded">
+                        {getAlterName(id)}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -52,9 +57,13 @@ export default function InnerWorldPage() {
           >
             <motion.div
               initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-              className="card-grimoire p-6 max-w-lg w-full"
+              className="card-grimoire overflow-hidden max-w-lg w-full"
               onClick={e => e.stopPropagation()}
             >
+              {selectedPlace.image && (
+                <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover" />
+              )}
+              <div className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="font-display text-xl text-foreground">{selectedPlace.name}</h2>
                 <button onClick={() => setSelectedPlace(null)} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
@@ -68,6 +77,7 @@ export default function InnerWorldPage() {
                   <span key={id} className="text-sm font-ui text-primary">{getAlterName(id)}</span>
                 ))}
               </div>
+            </div>
             </motion.div>
           </motion.div>
         )}
