@@ -4,6 +4,7 @@ import type { Resource } from '@/types/system';
 import { Plus, Trash2, X, Library } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 const categories: Resource['category'][] = ['livres', 'films', 'séries', 'musique', 'articles'];
 
@@ -22,7 +23,7 @@ export default function ManageResources() {
   return (
     <div>
       <AdminPageHeader title="Ressources" icon={Library}>
-        <button onClick={() => setIsAdding(true)} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
+        <button onClick={() => { playQuillSound(); setIsAdding(true); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
       </AdminPageHeader>
 
       <AnimatePresence>

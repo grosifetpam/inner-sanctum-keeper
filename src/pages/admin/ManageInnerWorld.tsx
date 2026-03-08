@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, X, Upload, Image as ImageIcon, Loader2, Map } from
 import { uploadImage, deleteImage } from '@/lib/storage';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 export default function ManageInnerWorld() {
   const { data, addInnerWorldPlace, updateInnerWorldPlace, deleteInnerWorldPlace, getAlterName, user } = useSystem();
@@ -13,7 +14,7 @@ export default function ManageInnerWorld() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const startNew = () => { setEditing({ id: crypto.randomUUID(), name: '', description: '', image: '', significance: '', linkedAlterIds: [], isPublic: true }); setIsNew(true); };
+  const startNew = () => { playQuillSound(); setEditing({ id: crypto.randomUUID(), name: '', description: '', image: '', significance: '', linkedAlterIds: [], isPublic: true }); setIsNew(true); };
   const save = () => { if (!editing || !editing.name.trim()) return; if (isNew) addInnerWorldPlace(editing); else updateInnerWorldPlace(editing); setEditing(null); };
   const toggleAlterLink = (alterId: string) => { if (!editing) return; const ids = editing.linkedAlterIds.includes(alterId) ? editing.linkedAlterIds.filter(id => id !== alterId) : [...editing.linkedAlterIds, alterId]; setEditing({ ...editing, linkedAlterIds: ids }); };
 

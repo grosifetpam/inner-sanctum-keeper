@@ -4,6 +4,7 @@ import { Plus, X, Heart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 export default function ManageMood() {
   const { data, addMoodEntry, getAlterName } = useSystem();
@@ -22,7 +23,7 @@ export default function ManageMood() {
   return (
     <div>
       <AdminPageHeader title="Suivi d'humeur" icon={Heart}>
-        <button onClick={() => { setIsAdding(true); setForm({ ...form, alterId: data.alters[0]?.id || '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
+        <button onClick={() => { playQuillSound(); setIsAdding(true); setForm({ ...form, alterId: data.alters[0]?.id || '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
       </AdminPageHeader>
 
       {chartData.length > 0 && (

@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, X, Eye, EyeOff, Upload, Image as ImageIcon, Loader
 import { uploadImage, deleteImage } from '@/lib/storage';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 const roleTypes: AlterRole[] = ['hôte', 'protecteur', 'persécuteur', 'gardien', 'observateur', 'trauma holder', 'autre'];
 
@@ -20,8 +21,8 @@ export default function ManageAlters() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const startNew = () => { setEditing({ id: crypto.randomUUID(), ...emptyAlter }); setIsNew(true); };
-  const startEdit = (a: Alter) => { setEditing({ ...a }); setIsNew(false); };
+  const startNew = () => { playQuillSound(); setEditing({ id: crypto.randomUUID(), ...emptyAlter }); setIsNew(true); };
+  const startEdit = (a: Alter) => { playQuillSound(); setEditing({ ...a }); setIsNew(false); };
   const save = () => { if (!editing || !editing.name.trim()) return; if (isNew) addAlter(editing); else updateAlter(editing); setEditing(null); };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
