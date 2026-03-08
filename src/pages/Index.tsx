@@ -188,21 +188,39 @@ export default function HomePage() {
         <div className="flex-1 divider-ornate" />
       </motion.div>
 
-      {/* Action buttons */}
+      {/* Category Covers */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="flex flex-wrap justify-center gap-4 pb-6"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pb-6"
       >
         {[
-          { to: '/alters', icon: Users, label: 'Les Alters' },
-          { to: '/journal', icon: BookOpen, label: 'Le Journal' },
-          { to: '/monde-interieur', icon: Map, label: 'Monde Intérieur' },
+          { to: '/alters', icon: Users, label: 'Les Alters', image: '/images/avatars/nyx.png' },
+          { to: '/journal', icon: BookOpen, label: 'Le Journal', image: '/images/innerworld/bibliotheque-des-ombres.jpg' },
+          { to: '/monde-interieur', icon: Map, label: 'Monde Intérieur', image: '/images/innerworld/forge-ignis.jpg' },
         ].map(btn => (
-          <motion.div key={btn.to} variants={itemVariants}>
-            <Link to={btn.to} className="btn-grimoire flex items-center gap-2">
-              <btn.icon className="w-4 h-4" /> {btn.label}
+          <motion.div key={btn.to} variants={itemVariants} whileHover={{ y: -5 }}>
+            <Link to={btn.to} className="block relative overflow-hidden rounded-xl border border-gold/20 aspect-[3/4] group shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_hsla(40,70%,50%,0.15)] transition-all duration-500 bg-black">
+              <div className="absolute inset-0">
+                <img 
+                  src={btn.image} 
+                  alt={btn.label} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50 group-hover:opacity-70 mix-blend-luminosity"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/grimoire-cover-bg.jpg';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+                <div className="absolute inset-0 ring-1 ring-inset ring-gold/10 rounded-xl" />
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-center z-10">
+                <div className="p-3 rounded-full bg-background/50 backdrop-blur-sm border border-gold/20 mb-4 group-hover:bg-gold/10 transition-colors duration-300">
+                  <btn.icon className="w-6 h-6 text-gold/70 group-hover:text-gold drop-shadow-md" />
+                </div>
+                <h3 className="font-display text-2xl text-foreground group-hover:text-gold transition-colors duration-300 tracking-wider">{btn.label}</h3>
+                <div className="w-12 h-px bg-gold/30 mt-4 group-hover:w-24 group-hover:bg-gold/60 transition-all duration-500" />
+              </div>
             </Link>
           </motion.div>
         ))}
