@@ -10,28 +10,28 @@ const defaultData: SystemData = {
   },
   alters: [
     {
-      id: "1", name: "Luna", avatar: "", role: "Hôte principal", roleType: "hôte",
+      id: "1", name: "Luna", avatar: "/images/avatars/luna.png", role: "Hôte principal", roleType: "hôte",
       apparentAge: "25", pronouns: "elle/la", personality: "Calme, réfléchie, mélancolique",
       strengths: "Empathie, écriture, introspection", difficulties: "Anxiété sociale, dissociation",
       relations: "Proche d'Ignis, protégée par Nyx", internalNotes: "Front le plus fréquent",
       isPublic: true,
     },
     {
-      id: "2", name: "Ignis", avatar: "", role: "Protecteur émotionnel", roleType: "protecteur",
+      id: "2", name: "Ignis", avatar: "/images/avatars/ignis.png", role: "Protecteur émotionnel", roleType: "protecteur",
       apparentAge: "30", pronouns: "il/lui", personality: "Intense, loyal, parfois colérique",
       strengths: "Force émotionnelle, détermination", difficulties: "Gestion de la colère",
       relations: "Allié de Luna, en conflit avec Shade", internalNotes: "Apparaît en situation de stress",
       isPublic: true,
     },
     {
-      id: "3", name: "Nyx", avatar: "", role: "Gardienne des souvenirs", roleType: "gardien",
+      id: "3", name: "Nyx", avatar: "/images/avatars/nyx.png", role: "Gardienne des souvenirs", roleType: "gardien",
       apparentAge: "Ageless", pronouns: "iel", personality: "Mystérieuse, sage, distante",
       strengths: "Mémoire, sagesse, stabilité", difficulties: "Détachement émotionnel",
       relations: "Protège Luna, observe Shade", internalNotes: "Rarement au front",
       isPublic: true,
     },
     {
-      id: "4", name: "Shade", avatar: "", role: "Persécuteur en transition", roleType: "persécuteur",
+      id: "4", name: "Shade", avatar: "/images/avatars/shade.png", role: "Persécuteur en transition", roleType: "persécuteur",
       apparentAge: "??", pronouns: "il/lui", personality: "Cynique, blessé, en quête de sens",
       strengths: "Lucidité, survie", difficulties: "Auto-sabotage, isolement",
       relations: "En conflit avec Ignis, surveillé par Nyx", internalNotes: "Travail thérapeutique en cours",
@@ -58,8 +58,8 @@ const defaultData: SystemData = {
     { id: "1", title: "Understanding DID", description: "Guide complet sur le TDI", link: "https://example.com", category: "articles", isPublic: true },
   ],
   innerWorld: [
-    { id: "1", name: "La Bibliothèque des Ombres", description: "Un vaste lieu rempli de livres anciens, éclairé par des bougies flottantes. C'est ici que Nyx garde les souvenirs.", image: "", significance: "Lieu de mémoire et de sagesse", linkedAlterIds: ["3"], isPublic: true },
-    { id: "2", name: "La Forge d'Ignis", description: "Une forge ardente où les émotions sont transformées en force. Les flammes ne brûlent jamais ceux qui sont bienvenus.", image: "", significance: "Lieu de transformation émotionnelle", linkedAlterIds: ["2"], isPublic: true },
+    { id: "1", name: "La Bibliothèque des Ombres", description: "Un vaste lieu rempli de livres anciens, éclairé par des bougies flottantes. C'est ici que Nyx garde les souvenirs.", image: "/images/innerworld/bibliotheque-des-ombres.jpg", significance: "Lieu de mémoire et de sagesse", linkedAlterIds: ["3"], isPublic: true },
+    { id: "2", name: "La Forge d'Ignis", description: "Une forge ardente où les émotions sont transformées en force. Les flammes ne brûlent jamais ceux qui sont bienvenus.", image: "/images/innerworld/forge-ignis.jpg", significance: "Lieu de transformation émotionnelle", linkedAlterIds: ["2"], isPublic: true },
   ],
   timeline: [
     { id: "1", date: "2026-01-15", title: "Découverte du système", description: "Première prise de conscience de notre pluralité", alterId: "1", isPublic: true },
