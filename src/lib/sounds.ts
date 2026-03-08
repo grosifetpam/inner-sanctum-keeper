@@ -1,6 +1,14 @@
 // Synthesized page-turn sound using Web Audio API — no external files needed
 
 let audioCtx: AudioContext | null = null;
+let soundEnabled = localStorage.getItem('grimoire-sound') !== 'off';
+
+export function isSoundEnabled() { return soundEnabled; }
+export function toggleSound() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem('grimoire-sound', soundEnabled ? 'on' : 'off');
+  return soundEnabled;
+}
 
 function getAudioContext() {
   if (!audioCtx) {
@@ -14,6 +22,7 @@ function getAudioContext() {
  * Uses filtered noise with a quick amplitude envelope.
  */
 export function playPageTurn(volume = 0.12) {
+  if (!soundEnabled) return;
   try {
     const ctx = getAudioContext();
     const duration = 0.35;
@@ -66,6 +75,7 @@ export function playPageTurn(volume = 0.12) {
  * Play a subtle quill/ink writing sound for form opens.
  */
 export function playQuillSound(volume = 0.08) {
+  if (!soundEnabled) return;
   try {
     const ctx = getAudioContext();
     const duration = 0.2;

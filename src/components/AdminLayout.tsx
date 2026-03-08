@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
-import { playPageTurn } from '@/lib/sounds';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck } from 'lucide-react';
+import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const adminNav = [
@@ -33,6 +33,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const isFirstRender = useRef(true);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -95,6 +96,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* Book back cover */}
         <div className="p-2 border-t border-border">
           <div className="divider-ornate mb-2" />
+          <button
+            onClick={() => setSoundOn(toggleSound())}
+            className="flex items-center gap-2.5 px-3 py-2 text-sm font-ui text-muted-foreground hover:text-gold transition-colors rounded hover:bg-muted/30 w-full"
+            title={soundOn ? 'Couper les sons' : 'Activer les sons'}
+          >
+            {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {soundOn ? 'Sons activés' : 'Sons coupés'}
+          </button>
           <Link to="/" className="flex items-center gap-2.5 px-3 py-2 text-sm font-ui text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted/30">
             <Home className="w-4 h-4" /> Voir le site
           </Link>

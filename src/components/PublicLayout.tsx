@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Shield, Brain, BookOpenCheck } from 'lucide-react';
-import { playPageTurn } from '@/lib/sounds';
+import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Shield, Brain, BookOpenCheck, Volume2, VolumeX } from 'lucide-react';
+import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
 
 const navItems = [
   { path: '/', label: 'Accueil', icon: Moon },
@@ -19,6 +19,7 @@ const navItems = [
 export default function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const isFirstRender = useRef(true);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -81,9 +82,18 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               ))}
             </div>
 
-            <Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors">
-              <Shield className="w-4 h-4" />
-            </Link>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setSoundOn(toggleSound())}
+                className="text-muted-foreground hover:text-gold transition-colors"
+                title={soundOn ? 'Couper les sons' : 'Activer les sons'}
+              >
+                {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </button>
+              <Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors">
+                <Shield className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
 
           {/* Mobile nav */}
