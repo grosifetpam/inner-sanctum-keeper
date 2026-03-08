@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Brain, BookOpenCheck, Volume2, VolumeX, Shield, Menu, X } from 'lucide-react';
 import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
 import GrimoireOpening from '@/components/GrimoireOpening';
+import AmbientParticles from '@/components/AmbientParticles';
 
 const navItems = [
   { path: '/', label: 'Accueil', icon: Moon },
@@ -42,6 +43,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {/* Background */}
         <div className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0" style={{ backgroundImage: "url('/images/bg-main.png')" }} />
         <div className="fixed inset-0 bg-overlay z-0" />
+        <AmbientParticles count={18} />
 
         {/* Book container */}
         <motion.div
