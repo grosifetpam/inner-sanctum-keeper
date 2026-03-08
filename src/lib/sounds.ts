@@ -72,6 +72,61 @@ export function playPageTurn(volume = 0.12) {
 }
 
 /**
+ * Play a deeper book-opening creak/thud sound for the grimoire intro.
+ */
+export function playBookOpen(volume = 0.18) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    const duration = 0.8;
+
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(80, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + duration);
+
+    const oscGain = ctx.createGain();
+    oscGain.gain.setValueAtTime(volume, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(oscGain);
+    oscGain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+
+    const creakDuration = 0.5;
+    const bufferSize = ctx.sampleRate * creakDuration;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(600, now);
+    filter.frequency.exponentialRampToValueAtTime(200, now + creakDuration);
+    filter.Q.value = 2;
+
+    const creakGain = ctx.createGain();
+    creakGain.gain.setValueAtTime(0, now);
+    creakGain.gain.linearRampToValueAtTime(volume * 0.5, now + 0.05);
+    creakGain.gain.exponentialRampToValueAtTime(0.001, now + creakDuration);
+
+    source.connect(filter);
+    filter.connect(creakGain);
+    creakGain.connect(ctx.destination);
+    source.start(now);
+    source.stop(now + creakDuration);
+  } catch {
+    // Silently fail
+  }
+}
+
+/**
  * Play a subtle quill/ink writing sound for form opens.
  */
 export function playQuillSound(volume = 0.08) {

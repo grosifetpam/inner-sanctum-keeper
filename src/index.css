@@ -348,6 +348,27 @@
   /* ═══════════════════════════════════════════════
      SEAL STAMP — form card opening
      ═══════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE COVER — closed book front
+     ═══════════════════════════════════════════════ */
+  .grimoire-cover {
+    background: linear-gradient(
+      160deg,
+      hsla(240, 12%, 8%, 1) 0%,
+      hsla(270, 15%, 10%, 1) 40%,
+      hsla(240, 10%, 7%, 1) 100%
+    );
+    border: 1px solid hsla(40, 70%, 50%, 0.15);
+    border-radius: 4px 12px 12px 4px;
+    box-shadow:
+      0 0 80px hsla(270, 30%, 10%, 0.8),
+      0 4px 30px hsla(240, 10%, 5%, 0.6),
+      inset 0 1px 0 hsla(40, 70%, 50%, 0.08),
+      inset 0 -1px 0 hsla(270, 30%, 20%, 0.1);
+    /* Spine edge */
+    border-left: 4px solid hsla(40, 70%, 50%, 0.2);
+  }
+
   @keyframes seal-break {
     0% {
       opacity: 0;

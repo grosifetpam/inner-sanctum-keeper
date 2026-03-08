@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Brain, BookOpenCheck, Volume2, VolumeX, Shield, Menu, X } from 'lucide-react';
-import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
+import { playPageTurn, playBookOpen, isSoundEnabled, toggleSound } from '@/lib/sounds';
 
 const navItems = [
   { path: '/', label: 'Accueil', icon: Moon },
@@ -16,11 +16,26 @@ const navItems = [
   { path: '/cartographie', label: 'Cartographie', icon: Brain },
 ];
 
+type OpenPhase = 'cover' | 'opening' | 'open';
+
 export default function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const isFirstRender = useRef(true);
   const [soundOn, setSoundOn] = useState(isSoundEnabled);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  // Check if the grimoire was already opened this session
+  const alreadyOpened = sessionStorage.getItem('grimoire-opened') === '1';
+  const [phase, setPhase] = useState<OpenPhase>(alreadyOpened ? 'open' : 'cover');
+
+  const handleOpenGrimoire = () => {
+    setPhase('opening');
+    playBookOpen();
+    setTimeout(() => {
+      setPhase('open');
+      sessionStorage.setItem('grimoire-opened', '1');
+    }, 1800);
+  };
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -34,6 +49,147 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
     setMobileNavOpen(false);
   }, [location.pathname]);
 
+  // ═══════════════════════════════════════
+  // COVER — closed grimoire
+  // ═══════════════════════════════════════
+  if (phase === 'cover') {
+    return (
+      <div className="min-h-screen relative flex items-center justify-center">
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{ backgroundImage: "url('/images/bg-main.png')" }}
+        />
+        <div className="fixed inset-0 bg-overlay z-0" />
+
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="relative z-10 cursor-pointer group"
+          onClick={handleOpenGrimoire}
+        >
+          {/* Book cover */}
+          <div className="grimoire-cover w-[320px] sm:w-[400px] md:w-[480px] aspect-[3/4] flex flex-col items-center justify-center p-10 relative">
+            {/* Ornamental corners */}
+            <div className="absolute top-3 left-3 w-8 h-8 border-t border-l border-gold/30" />
+            <div className="absolute top-3 right-3 w-8 h-8 border-t border-r border-gold/30" />
+            <div className="absolute bottom-3 left-3 w-8 h-8 border-b border-l border-gold/30" />
+            <div className="absolute bottom-3 right-3 w-8 h-8 border-b border-r border-gold/30" />
+
+            {/* Central emblem */}
+            <motion.div
+              animate={{ rotateY: [0, 360] }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+              className="mb-6"
+            >
+              <BookOpenCheck className="w-12 h-12 text-gold drop-shadow-[0_0_15px_hsla(40,70%,50%,0.4)]" />
+            </motion.div>
+
+            {/* Ornamental divider */}
+            <div className="w-24 h-px mb-4" style={{ background: 'linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.5), transparent)' }} />
+
+            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl text-gold tracking-[0.3em] text-center text-glow mb-2">
+              GRIMOIRE
+            </h1>
+
+            <div className="w-24 h-px mt-2 mb-6" style={{ background: 'linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.5), transparent)' }} />
+
+            <span className="text-[8px] text-gold/25 font-display tracking-[0.5em] mb-8">✦ ✦ ✦</span>
+
+            {/* Open prompt */}
+            <motion.p
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="text-xs text-gold/50 font-body italic tracking-wider"
+            >
+              Touchez pour ouvrir…
+            </motion.p>
+
+            {/* Hover glow */}
+            <div className="absolute inset-0 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+              style={{ boxShadow: '0 0 60px hsla(40, 70%, 50%, 0.15), inset 0 0 60px hsla(40, 70%, 50%, 0.05)' }}
+            />
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════
+  // OPENING ANIMATION
+  // ═══════════════════════════════════════
+  if (phase === 'opening') {
+    return (
+      <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{ backgroundImage: "url('/images/bg-main.png')" }}
+        />
+        <div className="fixed inset-0 bg-overlay z-0" />
+
+        <div className="relative z-10 flex items-center justify-center" style={{ perspective: '1200px' }}>
+          {/* Left cover — swings open to the left */}
+          <motion.div
+            initial={{ rotateY: 0 }}
+            animate={{ rotateY: -160 }}
+            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+            style={{ transformOrigin: 'left center', transformStyle: 'preserve-3d' }}
+            className="grimoire-cover w-[240px] sm:w-[300px] aspect-[3/4] absolute flex items-center justify-center"
+          >
+            <div style={{ backfaceVisibility: 'hidden' }} className="absolute inset-0 flex items-center justify-center rounded">
+              <BookOpenCheck className="w-10 h-10 text-gold/60" />
+            </div>
+          </motion.div>
+
+          {/* Revealed pages — fade in */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 1.0, ease: 'easeOut' }}
+            className="text-center"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+            >
+              <span className="text-[8px] text-gold/30 font-display tracking-[0.5em]">✦ ✦ ✦</span>
+              <p className="text-gold/60 font-display text-lg tracking-[0.2em] mt-2">Le grimoire s'ouvre…</p>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Particles during opening */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full z-20"
+            style={{
+              left: `${30 + Math.random() * 40}%`,
+              top: `${30 + Math.random() * 40}%`,
+              background: i % 3 === 0
+                ? 'hsla(40, 70%, 50%, 0.6)'
+                : i % 3 === 1
+                ? 'hsla(350, 60%, 45%, 0.4)'
+                : 'hsla(270, 30%, 60%, 0.3)',
+            }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
+              x: (Math.random() - 0.5) * 200,
+              y: (Math.random() - 0.5) * 200,
+            }}
+            transition={{ delay: 0.3 + i * 0.08, duration: 1.2, ease: 'easeOut' }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════
+  // OPEN — normal grimoire layout
+  // ═══════════════════════════════════════
   return (
     <div className="min-h-screen relative flex flex-col">
       {/* Background */}
@@ -44,7 +200,12 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <div className="fixed inset-0 bg-overlay z-0" />
 
       {/* Book container */}
-      <div className="relative z-10 flex-1 flex items-start justify-center px-2 sm:px-4 py-4 md:py-8">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="relative z-10 flex-1 flex items-start justify-center px-2 sm:px-4 py-4 md:py-8"
+      >
         <div className="w-full max-w-7xl flex flex-col lg:flex-row grimoire-book">
           
           {/* ═══ BOOK SPINE — left navigation ═══ */}
@@ -205,7 +366,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
