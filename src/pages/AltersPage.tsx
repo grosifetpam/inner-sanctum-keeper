@@ -22,9 +22,13 @@ function AlterCard({ alter, onClick }: { alter: Alter; onClick: () => void }) {
       className="card-grimoire p-5 cursor-pointer transition-all hover:border-primary/30"
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-display text-lg text-primary">
-          {alter.name[0]}
-        </div>
+        {alter.avatar ? (
+          <img src={alter.avatar} alt={alter.name} className="w-12 h-12 rounded-full object-cover border border-primary/20" />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-display text-lg text-primary">
+            {alter.name[0]}
+          </div>
+        )}
         <div>
           <h3 className="font-display text-foreground">{alter.name}</h3>
           <p className="text-xs font-ui text-muted-foreground">{alter.pronouns} • {alter.apparentAge || '?'} ans</p>
@@ -56,9 +60,13 @@ function AlterModal({ alter, onClose, getAlterName }: { alter: Alter; onClose: (
       >
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center font-display text-2xl text-primary">
-              {alter.name[0]}
-            </div>
+            {alter.avatar ? (
+              <img src={alter.avatar} alt={alter.name} className="w-14 h-14 rounded-full object-cover border border-primary/20" />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center font-display text-2xl text-primary">
+                {alter.name[0]}
+              </div>
+            )}
             <div>
               <h2 className="font-display text-xl text-foreground">{alter.name}</h2>
               <p className="text-sm font-ui text-muted-foreground">{alter.pronouns} • {alter.apparentAge || '?'} ans</p>
