@@ -59,7 +59,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="relative z-10 flex-1 flex items-start justify-center px-2 sm:px-4 py-4 md:py-8"
         >
-          <div className="w-full max-w-7xl flex flex-col md:flex-row grimoire-book">
+          <div className="w-full max-w-7xl flex flex-col md:flex-row grimoire-book relative">
+            {/* Ornamental gold corners */}
+            <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-gold/20 rounded-tl pointer-events-none z-20" />
+            <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-gold/20 rounded-tr pointer-events-none z-20" />
+            <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-gold/20 rounded-bl pointer-events-none z-20" />
+            <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-gold/20 rounded-br pointer-events-none z-20" />
+            {/* Inner ornamental frame */}
+            <div className="absolute inset-6 border border-gold/5 rounded pointer-events-none z-20" />
 
         {/* Grimoire Spine — Sidebar */}
         <motion.aside
