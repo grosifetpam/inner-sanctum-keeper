@@ -48,13 +48,25 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <GrimoireOpening storageKey="grimoire-admin-opened" title="GRIMOIRE" subtitle="Administration" icon="settings">
-      <div className="min-h-screen bg-background flex">
+      <div className="min-h-screen relative flex flex-col">
+        {/* Background */}
+        <div className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0" style={{ backgroundImage: "url('/images/bg-main.png')" }} />
+        <div className="fixed inset-0 bg-overlay z-0" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="relative z-10 flex-1 flex items-start justify-center px-2 sm:px-4 py-4 md:py-8"
+        >
+          <div className="w-full max-w-7xl flex flex-col md:flex-row grimoire-book">
+
         {/* Grimoire Spine — Sidebar */}
         <motion.aside
           initial={{ x: -60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="hidden md:flex flex-col w-60 grimoire-spine"
+          className="hidden md:flex flex-col w-60 grimoire-spine-panel"
         >
           <div className="p-4 border-b border-border relative">
             <div className="flex items-center gap-2">
@@ -107,8 +119,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </motion.aside>
 
         {/* Mobile header */}
-        <div className="flex-1 flex flex-col">
-          <header className="md:hidden border-b border-border grimoire-spine p-3">
+        <div className="flex-1 flex flex-col grimoire-page-panel">
+          <header className="md:hidden border-b border-gold/10 p-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <BookOpenCheck className="w-4 h-4 text-gold" />
@@ -136,7 +148,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 grimoire-page overflow-y-auto">
+          <main className="flex-1 grimoire-page-panel overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
@@ -152,6 +164,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </AnimatePresence>
           </main>
         </div>
+          </div>
+        </motion.div>
       </div>
     </GrimoireOpening>
   );
