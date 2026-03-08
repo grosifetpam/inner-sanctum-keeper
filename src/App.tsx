@@ -29,6 +29,7 @@ import ManageMood from "./pages/admin/ManageMood";
 import ManageFront from "./pages/admin/ManageFront";
 import ManageRelations from "./pages/admin/ManageRelations";
 import ManageSystem from "./pages/admin/ManageSystem";
+import ManageCartography from "./pages/admin/ManageCartography";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ function AppRoutes() {
         <Route path="/admin/front" element={<ProtectedRoute><ManageFront /></ProtectedRoute>} />
         <Route path="/admin/relations" element={<ProtectedRoute><ManageRelations /></ProtectedRoute>} />
         <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
+        <Route path="/admin/cartographie" element={<ProtectedRoute><ManageCartography /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
