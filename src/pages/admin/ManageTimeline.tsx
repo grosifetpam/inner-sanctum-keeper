@@ -4,6 +4,7 @@ import type { TimelineEvent } from '@/types/system';
 import { Plus, Trash2, X, Clock } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 export default function ManageTimeline() {
   const { data, addTimelineEvent, deleteTimelineEvent, getAlterName } = useSystem();
@@ -20,7 +21,7 @@ export default function ManageTimeline() {
   return (
     <div>
       <AdminPageHeader title="Chronologie" icon={Clock}>
-        <button onClick={() => { setIsAdding(true); setForm({ ...form, alterId: data.alters[0]?.id || '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
+        <button onClick={() => { playQuillSound(); setIsAdding(true); setForm({ ...form, alterId: data.alters[0]?.id || '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
       </AdminPageHeader>
 
       <AnimatePresence>

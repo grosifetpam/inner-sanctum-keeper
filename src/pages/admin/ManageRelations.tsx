@@ -5,6 +5,7 @@ import { Plus, Trash2, X, GitBranch } from 'lucide-react';
 import RelationGraph from '@/components/RelationGraph';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 const relationTypes: AlterRelation['type'][] = ['allié', 'protecteur', 'conflit', 'influence', 'famille interne'];
 
@@ -31,7 +32,7 @@ export default function ManageRelations() {
   return (
     <div>
       <AdminPageHeader title="Relations" icon={GitBranch}>
-        <button onClick={() => { setIsAdding(true); setForm({ fromAlterId: data.alters[0]?.id || '', toAlterId: data.alters[1]?.id || '', type: 'allié' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
+        <button onClick={() => { playQuillSound(); setIsAdding(true); setForm({ fromAlterId: data.alters[0]?.id || '', toAlterId: data.alters[1]?.id || '', type: 'allié' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
       </AdminPageHeader>
 
       <AdminSectionCard>

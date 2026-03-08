@@ -3,6 +3,7 @@ import { useSystem } from '@/contexts/SystemContext';
 import { Plus, X, Activity } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 export default function ManageFront() {
   const { data, addFrontEntry, getAlterName } = useSystem();
@@ -21,7 +22,7 @@ export default function ManageFront() {
   return (
     <div>
       <AdminPageHeader title="Front Tracker" icon={Activity}>
-        <button onClick={() => { setIsAdding(true); setForm({ alterId: data.alters[0]?.id || '', notes: '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Changer le front</button>
+        <button onClick={() => { playQuillSound(); setIsAdding(true); setForm({ alterId: data.alters[0]?.id || '', notes: '' }); }} className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Changer le front</button>
       </AdminPageHeader>
 
       <AdminSectionCard className="text-center">

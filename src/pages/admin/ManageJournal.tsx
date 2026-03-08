@@ -4,6 +4,7 @@ import type { JournalEntry } from '@/types/system';
 import { Plus, Trash2, Edit2, X, Eye, EyeOff, Lock, BookOpen } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, AdminList, AdminListItem, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { playQuillSound } from '@/lib/sounds';
 
 export default function ManageJournal() {
   const { data, addJournalEntry, updateJournalEntry, deleteJournalEntry, getAlterName } = useSystem();
@@ -12,6 +13,7 @@ export default function ManageJournal() {
   const [tagInput, setTagInput] = useState('');
 
   const startNew = () => {
+    playQuillSound();
     setEditing({ id: crypto.randomUUID(), date: new Date().toISOString().split('T')[0], alterId: data.alters[0]?.id || '', title: '', content: '', tags: [], isPublic: true, isPrivateAlterJournal: false });
     setIsNew(true); setTagInput('');
   };
