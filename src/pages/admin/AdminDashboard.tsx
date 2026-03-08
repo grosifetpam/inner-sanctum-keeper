@@ -21,7 +21,7 @@ const statVariants = {
   hidden: { opacity: 0, scale: 0.8, rotateX: -20 },
   visible: (i: number) => ({
     opacity: 1, scale: 1, rotateX: 0,
-    transition: { delay: 0.2 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay: 0.2 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   }),
 };
 
