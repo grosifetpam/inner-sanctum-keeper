@@ -15,6 +15,7 @@ import InnerWorldPage from "./pages/InnerWorldPage";
 import CitationsPage from "./pages/CitationsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import TimelinePage from "./pages/TimelinePage";
+import LexiconPage from "./pages/LexiconPage";
 import CartographyPage from "./pages/CartographyPage";
 import LoginPage from "./pages/LoginPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
@@ -65,6 +66,7 @@ function AppRoutes() {
         <Route path="/monde-interieur" element={<PublicRoute><InnerWorldPage /></PublicRoute>} />
         <Route path="/citations" element={<PublicRoute><CitationsPage /></PublicRoute>} />
         <Route path="/ressources" element={<PublicRoute><ResourcesPage /></PublicRoute>} />
+        <Route path="/lexique" element={<PublicRoute><LexiconPage /></PublicRoute>} />
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
         <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
 
