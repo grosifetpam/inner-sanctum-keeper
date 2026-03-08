@@ -12,6 +12,7 @@ const navItems = [
   { path: '/monde-interieur', label: 'Monde Intérieur', icon: Map },
   { path: '/citations', label: 'Citations', icon: Quote },
   { path: '/ressources', label: 'Ressources', icon: Library },
+  { path: '/lexique', label: 'Lexique', icon: BookOpenCheck },
   { path: '/chronologie', label: 'Chronologie', icon: Clock },
   { path: '/cartographie', label: 'Cartographie', icon: Brain },
 ];
