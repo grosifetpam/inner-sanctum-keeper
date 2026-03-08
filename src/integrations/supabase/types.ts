@@ -14,7 +14,351 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alter_relations: {
+        Row: {
+          created_at: string
+          from_alter_id: string
+          id: string
+          to_alter_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_alter_id: string
+          id?: string
+          to_alter_id: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          from_alter_id?: string
+          id?: string
+          to_alter_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      alters: {
+        Row: {
+          apparent_age: string | null
+          avatar: string | null
+          created_at: string
+          difficulties: string
+          id: string
+          internal_notes: string
+          is_public: boolean
+          name: string
+          personality: string
+          pronouns: string
+          relations: string
+          role: string
+          role_type: string
+          strengths: string
+          user_id: string
+        }
+        Insert: {
+          apparent_age?: string | null
+          avatar?: string | null
+          created_at?: string
+          difficulties?: string
+          id?: string
+          internal_notes?: string
+          is_public?: boolean
+          name: string
+          personality?: string
+          pronouns?: string
+          relations?: string
+          role?: string
+          role_type?: string
+          strengths?: string
+          user_id: string
+        }
+        Update: {
+          apparent_age?: string | null
+          avatar?: string | null
+          created_at?: string
+          difficulties?: string
+          id?: string
+          internal_notes?: string
+          is_public?: boolean
+          name?: string
+          personality?: string
+          pronouns?: string
+          relations?: string
+          role?: string
+          role_type?: string
+          strengths?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      citations: {
+        Row: {
+          alter_id: string
+          created_at: string
+          date: string
+          id: string
+          is_public: boolean
+          text: string
+          user_id: string
+        }
+        Insert: {
+          alter_id: string
+          created_at?: string
+          date: string
+          id?: string
+          is_public?: boolean
+          text: string
+          user_id: string
+        }
+        Update: {
+          alter_id?: string
+          created_at?: string
+          date?: string
+          id?: string
+          is_public?: boolean
+          text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      front_entries: {
+        Row: {
+          alter_id: string
+          created_at: string
+          id: string
+          notes: string
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          alter_id: string
+          created_at?: string
+          id?: string
+          notes?: string
+          timestamp: string
+          user_id: string
+        }
+        Update: {
+          alter_id?: string
+          created_at?: string
+          id?: string
+          notes?: string
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      inner_world_places: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image: string | null
+          is_public: boolean
+          linked_alter_ids: string[]
+          name: string
+          significance: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          is_public?: boolean
+          linked_alter_ids?: string[]
+          name: string
+          significance?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          is_public?: boolean
+          linked_alter_ids?: string[]
+          name?: string
+          significance?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          alter_id: string
+          content: string
+          created_at: string
+          date: string
+          id: string
+          is_private_alter_journal: boolean
+          is_public: boolean
+          tags: string[]
+          title: string
+          user_id: string
+        }
+        Insert: {
+          alter_id: string
+          content?: string
+          created_at?: string
+          date: string
+          id?: string
+          is_private_alter_journal?: boolean
+          is_public?: boolean
+          tags?: string[]
+          title?: string
+          user_id: string
+        }
+        Update: {
+          alter_id?: string
+          content?: string
+          created_at?: string
+          date?: string
+          id?: string
+          is_private_alter_journal?: boolean
+          is_public?: boolean
+          tags?: string[]
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mood_entries: {
+        Row: {
+          alter_id: string
+          created_at: string
+          date: string
+          energy_level: number
+          id: string
+          mood: string
+          notes: string
+          user_id: string
+        }
+        Insert: {
+          alter_id: string
+          created_at?: string
+          date: string
+          energy_level?: number
+          id?: string
+          mood?: string
+          notes?: string
+          user_id: string
+        }
+        Update: {
+          alter_id?: string
+          created_at?: string
+          date?: string
+          energy_level?: number
+          id?: string
+          mood?: string
+          notes?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          is_public: boolean
+          link: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_public?: boolean
+          link?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_public?: boolean
+          link?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      system_info: {
+        Row: {
+          created_at: string
+          current_front_alter_id: string
+          description: string
+          id: string
+          mood_of_day: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_front_alter_id?: string
+          description?: string
+          id?: string
+          mood_of_day?: string
+          name?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_front_alter_id?: string
+          description?: string
+          id?: string
+          mood_of_day?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      timeline_events: {
+        Row: {
+          alter_id: string
+          created_at: string
+          date: string
+          description: string
+          id: string
+          is_public: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          alter_id: string
+          created_at?: string
+          date: string
+          description?: string
+          id?: string
+          is_public?: boolean
+          title?: string
+          user_id: string
+        }
+        Update: {
+          alter_id?: string
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          is_public?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -35,14 +35,16 @@ import ManageCartography from "./pages/admin/ManageCartography";
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isFirstSetup } = useSystem();
-  if (!isAuthenticated || isFirstSetup) return <Navigate to="/login" replace />;
+  const { isAuthenticated, isLoading } = useSystem();
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Chargement...</div>;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <AdminLayout>{children}</AdminLayout>;
 }
 
 function LoginRoute() {
-  const { isAuthenticated, isFirstSetup } = useSystem();
-  if (isAuthenticated && !isFirstSetup) return <Navigate to="/admin" replace />;
+  const { isAuthenticated, isLoading } = useSystem();
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Chargement...</div>;
+  if (isAuthenticated) return <Navigate to="/admin" replace />;
   return <LoginPage />;
 }
 
