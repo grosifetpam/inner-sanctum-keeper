@@ -298,6 +298,7 @@ export type Database = {
           created_at: string
           current_front_alter_id: string
           description: string
+          homepage_image: string | null
           id: string
           mood_of_day: string
           name: string
@@ -308,6 +309,7 @@ export type Database = {
           created_at?: string
           current_front_alter_id?: string
           description?: string
+          homepage_image?: string | null
           id?: string
           mood_of_day?: string
           name?: string
@@ -318,6 +320,7 @@ export type Database = {
           created_at?: string
           current_front_alter_id?: string
           description?: string
+          homepage_image?: string | null
           id?: string
           mood_of_day?: string
           name?: string

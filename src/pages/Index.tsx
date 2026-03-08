@@ -75,6 +75,24 @@ export default function HomePage() {
         >
           {systemInfo.description}
         </motion.p>
+
+        {/* Homepage image */}
+        {systemInfo.homepageImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+            className="mt-8 mx-auto max-w-2xl"
+          >
+            <div className="card-grimoire p-2 overflow-hidden">
+              <img
+                src={systemInfo.homepageImage}
+                alt={systemInfo.name}
+                className="w-full h-auto rounded object-cover max-h-80"
+              />
+            </div>
+          </motion.div>
+        )}
       </motion.div>
 
       {/* Stats row */}
