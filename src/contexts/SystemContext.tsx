@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { SystemData, Alter, JournalEntry, MoodEntry, FrontEntry, Citation, Resource, InnerWorldPlace, TimelineEvent, AlterRelation, AlterRole } from '@/types/system';
+import type { SystemData, Alter, JournalEntry, MoodEntry, FrontEntry, Citation, Resource, InnerWorldPlace, TimelineEvent, AlterRelation, AlterRole, LexiconEntry } from '@/types/system';
 import type { User } from '@supabase/supabase-js';
 
 const emptyData: SystemData = {
   systemInfo: { name: '', description: '', currentFrontAlterId: '', moodOfDay: '', homepageImage: '' },
   alters: [], journal: [], moods: [], frontHistory: [], citations: [],
-  resources: [], innerWorld: [], timeline: [], relations: [], adminPassword: '',
+  resources: [], innerWorld: [], timeline: [], relations: [], lexicon: [], adminPassword: '',
 };
 
 interface SystemContextType {
@@ -38,6 +38,9 @@ interface SystemContextType {
   deleteTimelineEvent: (id: string) => void;
   addRelation: (relation: AlterRelation) => void;
   deleteRelation: (id: string) => void;
+  addLexiconEntry: (entry: LexiconEntry) => void;
+  updateLexiconEntry: (entry: LexiconEntry) => void;
+  deleteLexiconEntry: (id: string) => void;
   getAlterName: (id: string) => string;
   refreshData: () => Promise<void>;
 }
@@ -97,6 +100,10 @@ function mapRelation(row: any): AlterRelation {
   return { id: row.id, fromAlterId: row.from_alter_id, toAlterId: row.to_alter_id, type: row.type };
 }
 
+function mapLexicon(row: any): LexiconEntry {
+  return { id: row.id, term: row.term, definition: row.definition, category: row.category, isPublic: row.is_public };
+}
+
 export const SystemProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<SystemData>(emptyData);
   const [user, setUser] = useState<User | null>(null);
@@ -108,7 +115,7 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
   // Fetch all data (public or authenticated)
   const fetchData = useCallback(async () => {
     try {
-      const [sysRes, altRes, jrnRes, moodRes, frontRes, citRes, resRes, plcRes, tlRes, relRes] = await Promise.all([
+      const [sysRes, altRes, jrnRes, moodRes, frontRes, citRes, resRes, plcRes, tlRes, relRes, lexRes] = await Promise.all([
         supabase.from('system_info').select('*').limit(1).single(),
         supabase.from('alters').select('*').order('created_at'),
         supabase.from('journal_entries').select('*').order('created_at', { ascending: false }),
@@ -119,6 +126,7 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
         supabase.from('inner_world_places').select('*').order('created_at'),
         supabase.from('timeline_events').select('*').order('date'),
         supabase.from('alter_relations').select('*'),
+        supabase.from('lexicon_entries').select('*').order('term'),
       ]);
 
       setData({
@@ -136,6 +144,7 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
         innerWorld: (plcRes.data || []).map(mapPlace),
         timeline: (tlRes.data || []).map(mapTimeline),
         relations: (relRes.data || []).map(mapRelation),
+        lexicon: (lexRes.data || []).map(mapLexicon),
         adminPassword: '',
       });
     } catch (err) {
@@ -368,6 +377,30 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
     setData(prev => ({ ...prev, relations: prev.relations.filter(r => r.id !== id) }));
   };
 
+  const addLexiconEntry = async (entry: LexiconEntry) => {
+    if (!user) return;
+    const { data: inserted } = await supabase.from('lexicon_entries').insert({
+      user_id: user.id, term: entry.term, definition: entry.definition,
+      category: entry.category, is_public: entry.isPublic,
+    } as any).select().single();
+    if (inserted) setData(prev => ({ ...prev, lexicon: [...prev.lexicon, mapLexicon(inserted)] }));
+  };
+
+  const updateLexiconEntry = async (entry: LexiconEntry) => {
+    if (!user) return;
+    await supabase.from('lexicon_entries').update({
+      term: entry.term, definition: entry.definition,
+      category: entry.category, is_public: entry.isPublic,
+    } as any).eq('id', entry.id);
+    setData(prev => ({ ...prev, lexicon: prev.lexicon.map(l => l.id === entry.id ? entry : l) }));
+  };
+
+  const deleteLexiconEntry = async (id: string) => {
+    if (!user) return;
+    await supabase.from('lexicon_entries').delete().eq('id', id);
+    setData(prev => ({ ...prev, lexicon: prev.lexicon.filter(l => l.id !== id) }));
+  };
+
   const getAlterName = (id: string) => data.alters.find(a => a.id === id)?.name || 'Inconnu';
 
   return (
@@ -378,7 +411,7 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
       addMoodEntry, addFrontEntry, addCitation, deleteCitation,
       addResource, deleteResource, addInnerWorldPlace, updateInnerWorldPlace,
       deleteInnerWorldPlace, addTimelineEvent, deleteTimelineEvent,
-      addRelation, deleteRelation, getAlterName, refreshData: fetchData,
+      addRelation, deleteRelation, addLexiconEntry, updateLexiconEntry, deleteLexiconEntry, getAlterName, refreshData: fetchData,
     }}>
       {children}
     </SystemContext.Provider>

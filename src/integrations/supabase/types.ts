@@ -227,6 +227,36 @@ export type Database = {
         }
         Relationships: []
       }
+      lexicon_entries: {
+        Row: {
+          category: string
+          created_at: string
+          definition: string
+          id: string
+          is_public: boolean
+          term: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          definition?: string
+          id?: string
+          is_public?: boolean
+          term: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          definition?: string
+          id?: string
+          is_public?: boolean
+          term?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mood_entries: {
         Row: {
           alter_id: string
