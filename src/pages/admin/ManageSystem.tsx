@@ -1,13 +1,32 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
-import { Settings } from 'lucide-react';
+import { Settings, Upload, X, Image } from 'lucide-react';
 import { AdminPageHeader, AdminFormCard } from '@/components/admin/AdminPageWrapper';
+import { uploadImage, deleteImage } from '@/lib/storage';
 
 export default function ManageSystem() {
-  const { data, updateSystemInfo } = useSystem();
+  const { data, updateSystemInfo, user } = useSystem();
   const [form, setForm] = useState({ ...data.systemInfo });
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const save = () => { updateSystemInfo(form); };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploading(true);
+    const url = await uploadImage('inner-world', user.id, file);
+    if (url) setForm(prev => ({ ...prev, homepageImage: url }));
+    setUploading(false);
+  };
+
+  const removeImage = async () => {
+    if (form.homepageImage) {
+      await deleteImage('inner-world', form.homepageImage);
+      setForm(prev => ({ ...prev, homepageImage: '' }));
+    }
+  };
 
   return (
     <div>
@@ -33,6 +52,32 @@ export default function ManageSystem() {
               {data.alters.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
+
+          {/* Homepage image */}
+          <div>
+            <label className="text-xs font-ui text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 mb-1">
+              <Image className="w-3.5 h-3.5" /> Image de la page d'accueil
+            </label>
+            {form.homepageImage ? (
+              <div className="relative inline-block">
+                <img src={form.homepageImage} alt="Accueil" className="w-full max-w-md h-48 object-cover rounded border border-border" />
+                <button onClick={removeImage} className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 hover:opacity-80 transition-opacity">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                className="w-full max-w-md h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-2 text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
+              >
+                <Upload className="w-6 h-6" />
+                <span className="text-sm font-ui">{uploading ? 'Envoi en cours…' : 'Cliquez pour ajouter une image'}</span>
+              </button>
+            )}
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+          </div>
+
           <button onClick={save} className="btn-grimoire">Sauvegarder</button>
         </div>
       </AdminFormCard>
