@@ -420,4 +420,97 @@
   .hover-ember:hover {
     animation: ember-glow 2s ease-in-out infinite;
   }
+
+  /* ═══════════════════════════════════════════════
+     MYSTICAL ORNAMENT — serpent separator
+     ═══════════════════════════════════════════════ */
+  .divider-serpent {
+    position: relative;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .divider-serpent::before {
+    content: '🐍';
+    font-size: 12px;
+    opacity: 0.25;
+    filter: grayscale(0.5);
+  }
+  .divider-serpent::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 20%, hsla(350, 60%, 45%, 0.2) 40%, transparent 50%, hsla(350, 60%, 45%, 0.2) 60%, transparent 80%);
+  }
+
+  /* ═══════════════════════════════════════════════
+     ROSE NOIR — decorative dark rose border
+     ═══════════════════════════════════════════════ */
+  .border-rose-noir {
+    border-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsla(350, 70%, 25%, 0.3) 20%,
+      hsla(350, 70%, 25%, 0.5) 50%,
+      hsla(350, 70%, 25%, 0.3) 80%,
+      transparent 100%
+    ) 1;
+  }
+
+  /* ═══════════════════════════════════════════════
+     RUNE CORNERS — for section cards
+     ═══════════════════════════════════════════════ */
+  .rune-corners {
+    position: relative;
+  }
+  .rune-corners::before {
+    content: '᛭';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    color: hsla(40, 70%, 50%, 0.15);
+    font-size: 10px;
+    pointer-events: none;
+  }
+  .rune-corners::after {
+    content: '᛭';
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    color: hsla(40, 70%, 50%, 0.15);
+    font-size: 10px;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════════════
+     MOON PHASE BAR — decorative header element
+     ═══════════════════════════════════════════════ */
+  .moon-phases {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0.2;
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE AURA — subtle glow around sections
+     ═══════════════════════════════════════════════ */
+  @keyframes aura-pulse {
+    0%, 100% {
+      box-shadow: 0 0 30px hsla(270, 30%, 15%, 0.3), inset 0 0 20px hsla(270, 20%, 10%, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 50px hsla(350, 40%, 20%, 0.2), inset 0 0 30px hsla(40, 30%, 15%, 0.15);
+    }
+  }
+  .aura-glow {
+    animation: aura-pulse 6s ease-in-out infinite;
+  }
 }
