@@ -21,11 +21,10 @@ export default function TimelinePage() {
         {/* Timeline spine */}
         <motion.div
           className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px"
-          style={{ background: 'linear-gradient(180deg, transparent, hsla(40, 70%, 50%, 0.3), hsla(350, 60%, 45%, 0.2), transparent)' }}
+          style={{ background: 'linear-gradient(180deg, transparent, hsla(40, 70%, 50%, 0.3), hsla(350, 60%, 45%, 0.2), transparent)', transformOrigin: 'top' }}
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
           transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
-          style-={{ transformOrigin: 'top' }}
         />
 
         {publicEvents.map((event, i) => (
