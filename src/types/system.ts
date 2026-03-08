@@ -91,6 +91,7 @@ export interface SystemInfo {
   description: string;
   currentFrontAlterId: string;
   moodOfDay: string;
+  homepageImage?: string;
 }
 
 export interface SystemData {

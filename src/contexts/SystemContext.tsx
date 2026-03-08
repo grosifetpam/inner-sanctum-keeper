@@ -4,7 +4,7 @@ import type { SystemData, Alter, JournalEntry, MoodEntry, FrontEntry, Citation, 
 import type { User } from '@supabase/supabase-js';
 
 const emptyData: SystemData = {
-  systemInfo: { name: '', description: '', currentFrontAlterId: '', moodOfDay: '' },
+  systemInfo: { name: '', description: '', currentFrontAlterId: '', moodOfDay: '', homepageImage: '' },
   alters: [], journal: [], moods: [], frontHistory: [], citations: [],
   resources: [], innerWorld: [], timeline: [], relations: [], adminPassword: '',
 };
@@ -125,6 +125,7 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
         systemInfo: sysRes.data ? {
           name: sysRes.data.name, description: sysRes.data.description,
           currentFrontAlterId: sysRes.data.current_front_alter_id, moodOfDay: sysRes.data.mood_of_day,
+          homepageImage: (sysRes.data as any).homepage_image || '',
         } : emptyData.systemInfo,
         alters: (altRes.data || []).map(mapAlter),
         journal: (jrnRes.data || []).map(mapJournal),
@@ -187,13 +188,15 @@ export const SystemProvider = ({ children }: { children: ReactNode }) => {
       await supabase.from('system_info').update({
         name: info.name, description: info.description,
         current_front_alter_id: info.currentFrontAlterId, mood_of_day: info.moodOfDay,
+        homepage_image: info.homepageImage || '',
         updated_at: new Date().toISOString(),
-      }).eq('id', existing.id);
+      } as any).eq('id', existing.id);
     } else {
       await supabase.from('system_info').insert({
         user_id: user.id, name: info.name, description: info.description,
         current_front_alter_id: info.currentFrontAlterId, mood_of_day: info.moodOfDay,
-      });
+        homepage_image: info.homepageImage || '',
+      } as any);
     }
   };
 
