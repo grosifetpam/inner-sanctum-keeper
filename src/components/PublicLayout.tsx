@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageTurnTransition from '@/components/PageTurnTransition';
 import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Brain, BookOpenCheck, Volume2, VolumeX, Shield, Menu, X } from 'lucide-react';
 import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
 import GrimoireOpening from '@/components/GrimoireOpening';
@@ -172,19 +173,11 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
 
               <div className="hidden lg:block h-px" style={{ background: 'linear-gradient(90deg, hsla(40, 70%, 50%, 0.2), hsla(40, 70%, 50%, 0.05) 50%, transparent)' }} />
 
-              <AnimatePresence mode="wait">
-                <motion.main
-                  key={location.pathname}
-                  initial={{ opacity: 0, rotateY: -4, scale: 0.98 }}
-                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotateY: 3, scale: 0.98 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ perspective: '1200px', transformOrigin: 'left center' }}
-                  className="flex-1 p-4 md:p-8 overflow-y-auto"
-                >
+              <PageTurnTransition className="flex-1 overflow-y-auto">
+                <div className="p-4 md:p-8">
                   {children}
-                </motion.main>
-              </AnimatePresence>
+                </div>
+              </PageTurnTransition>
 
               <div className="border-t border-border/20 py-4 px-6">
                 <div className="h-px mb-3" style={{ background: 'linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.1), transparent)' }} />
