@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import type { AlterRelation } from '@/types/system';
 import { Plus, Trash2, X } from 'lucide-react';
+import RelationGraph from '@/components/RelationGraph';
 
 const relationTypes: AlterRelation['type'][] = ['allié', 'protecteur', 'conflit', 'influence', 'famille interne'];
 
@@ -33,23 +34,10 @@ export default function ManageRelations() {
           className="btn-grimoire flex items-center gap-2 text-xs"><Plus className="w-4 h-4" /> Ajouter</button>
       </div>
 
-      {/* Simple visual graph */}
+      {/* Interactive graph */}
       <div className="card-grimoire p-6 mb-6">
         <h2 className="font-display text-sm text-gold mb-4">Carte des relations</h2>
-        <div className="flex flex-wrap gap-3 justify-center">
-          {data.alters.map(a => {
-            const rels = data.relations.filter(r => r.fromAlterId === a.id || r.toAlterId === a.id);
-            return (
-              <div key={a.id} className="text-center">
-                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center font-display text-primary mx-auto mb-1">
-                  {a.name[0]}
-                </div>
-                <p className="text-xs font-ui text-foreground">{a.name}</p>
-                <p className="text-[10px] text-muted-foreground">{rels.length} liens</p>
-              </div>
-            );
-          })}
-        </div>
+        <RelationGraph alters={data.alters} relations={data.relations} />
       </div>
 
       {isAdding && (
