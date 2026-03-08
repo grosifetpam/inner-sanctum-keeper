@@ -235,24 +235,78 @@
   /* ═══════════════════════════════════════════════
      GRIMOIRE NAV LINK
      ═══════════════════════════════════════════════ */
-  .grimoire-nav-link {
-    position: relative;
+  /* ═══════════════════════════════════════════════
+     GRIMOIRE BOOK — open book layout
+     ═══════════════════════════════════════════════ */
+  .grimoire-book {
+    background: hsla(240, 10%, 5%, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsla(40, 70%, 50%, 0.08);
+    border-radius: 4px 12px 12px 4px;
+    box-shadow:
+      0 0 60px hsla(270, 30%, 10%, 0.6),
+      0 0 120px hsla(240, 10%, 5%, 0.4),
+      inset 0 1px 0 hsla(40, 70%, 50%, 0.05);
+    min-height: calc(100vh - 4rem);
     overflow: hidden;
   }
-  .grimoire-nav-link::before {
+
+  .grimoire-spine-panel {
+    background: linear-gradient(
+      180deg,
+      hsla(240, 10%, 7%, 0.95) 0%,
+      hsla(270, 12%, 8%, 0.95) 50%,
+      hsla(240, 10%, 6%, 0.95) 100%
+    );
+    border-right: 1px solid hsla(40, 70%, 50%, 0.12);
+    position: relative;
+  }
+  /* Binding detail — golden thread */
+  .grimoire-spine-panel::after {
     content: '';
     position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 60%;
-    border-left: 2px solid hsl(var(--primary));
-    opacity: 0;
-    transition: all 0.3s ease;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsla(40, 70%, 50%, 0.15) 15%,
+      hsla(40, 70%, 50%, 0.06) 30%,
+      hsla(40, 70%, 50%, 0.15) 50%,
+      hsla(40, 70%, 50%, 0.06) 70%,
+      hsla(40, 70%, 50%, 0.15) 85%,
+      transparent 100%
+    );
+    pointer-events: none;
   }
-  .grimoire-nav-link.active::before {
-    opacity: 1;
+
+  .grimoire-page-panel {
+    background: linear-gradient(
+      135deg,
+      hsla(240, 8%, 8%, 0.6) 0%,
+      hsla(240, 6%, 9%, 0.6) 50%,
+      hsla(270, 8%, 9%, 0.6) 100%
+    );
+    position: relative;
+  }
+  /* Parchment texture grain */
+  .grimoire-page-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+  .grimoire-page-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .grimoire-toc-link {
+    position: relative;
   }
 
   /* ═══════════════════════════════════════════════
