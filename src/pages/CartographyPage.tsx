@@ -1,6 +1,8 @@
 import { useSystem } from '@/contexts/SystemContext';
 import PsychologicalMap from '@/components/PsychologicalMap';
 import { motion } from 'framer-motion';
+import { Brain } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 
 export default function CartographyPage() {
   const { data } = useSystem();
@@ -11,25 +13,21 @@ export default function CartographyPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-8 text-center">
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Cartographie du Système</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-        <p className="text-muted-foreground text-sm">Explorez les rôles, influences et relations entre les alters</p>
-      </motion.div>
+      <PageHeader title="Cartographie du Système" subtitle="Explorez les rôles, influences et relations entre les alters" icon={Brain} chapter="Chapitre VII" />
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="card-grimoire p-6 grimoire-corners"
+        className="card-grimoire rune-corners p-6 aura-glow"
       >
         {publicAlters.length > 0 ? (
           <PsychologicalMap alters={publicAlters} relations={publicRelations} />
         ) : (
-          <p className="text-center text-muted-foreground py-12">Aucun alter public à afficher.</p>
+          <div className="text-center py-12">
+            <Brain className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+            <p className="text-muted-foreground font-body italic">La carte reste à dessiner…</p>
+          </div>
         )}
       </motion.div>
     </div>

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Users } from 'lucide-react';
 import type { Alter } from '@/types/system';
+import PageHeader from '@/components/PageHeader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -30,13 +31,16 @@ function AlterCard({ alter, onClick }: { alter: Alter; onClick: () => void }) {
       variants={cardVariants}
       whileHover={{ y: -6, transition: { duration: 0.2 } }}
       onClick={onClick}
-      className="card-grimoire p-5 cursor-pointer transition-all hover:border-primary/30 hover-ember"
+      className="card-grimoire rune-corners p-5 cursor-pointer transition-all hover:border-primary/30 hover-ember"
     >
       <div className="flex items-center gap-3 mb-3">
         {alter.avatar ? (
-          <img src={alter.avatar} alt={alter.name} className="w-12 h-12 rounded-full object-cover border border-primary/20" />
+          <div className="relative">
+            <img src={alter.avatar} alt={alter.name} className="w-12 h-12 rounded-full object-cover border border-primary/20" />
+            <div className="absolute inset-0 rounded-full" style={{ boxShadow: 'inset 0 0 10px hsla(270, 30%, 10%, 0.5)' }} />
+          </div>
         ) : (
-          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-display text-lg text-primary">
+          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-display text-lg text-primary" style={{ boxShadow: '0 0 15px hsla(350, 60%, 45%, 0.2)' }}>
             {alter.name[0]}
           </div>
         )}
@@ -48,7 +52,8 @@ function AlterCard({ alter, onClick }: { alter: Alter; onClick: () => void }) {
       <span className={`inline-block px-2 py-0.5 text-xs font-ui rounded ${roleColors[alter.roleType] || roleColors['autre']}`}>
         {alter.roleType}
       </span>
-      <p className="text-sm text-muted-foreground font-ui mt-2">{alter.role}</p>
+      <p className="text-sm text-muted-foreground font-ui mt-2 line-clamp-2">{alter.role}</p>
+      <div className="mt-3 text-gold/10 text-[7px] tracking-[0.3em] font-display text-right">✦</div>
     </motion.div>
   );
 }
@@ -68,7 +73,7 @@ function AlterModal({ alter, onClose, getAlterName }: { alter: Alter; onClose: (
         exit={{ opacity: 0, scaleY: 0.1, scaleX: 0.85 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformOrigin: 'top center' }}
-        className="card-grimoire p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto scrollbar-dark relative"
+        className="card-grimoire rune-corners p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto scrollbar-dark relative aura-glow"
         onClick={e => e.stopPropagation()}
       >
         {/* Top seal line */}
@@ -115,10 +120,12 @@ function AlterModal({ alter, onClose, getAlterName }: { alter: Alter; onClose: (
               transition={{ delay: 0.3 + i * 0.06, duration: 0.3 }}
             >
               <h4 className="text-xs font-ui text-gold uppercase tracking-widest mb-1">{label}</h4>
-              <p className="text-sm font-body text-foreground/80">{value}</p>
+              <p className="text-sm font-body text-foreground/80 leading-relaxed">{value}</p>
             </motion.div>
           ) : null)}
         </div>
+
+        <div className="divider-serpent mt-6" />
       </motion.div>
     </motion.div>
   );
@@ -131,18 +138,7 @@ export default function AltersPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-center mb-8"
-      >
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Les Alters</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-        <p className="text-muted-foreground font-body">Les voix qui composent notre système</p>
-      </motion.div>
+      <PageHeader title="Les Alters" subtitle="Les voix qui composent notre système" icon={Users} chapter="Chapitre I" />
 
       <motion.div
         variants={containerVariants}
@@ -154,6 +150,12 @@ export default function AltersPage() {
           <AlterCard key={alter.id} alter={alter} onClick={() => setSelectedAlter(alter)} />
         ))}
       </motion.div>
+
+      {publicAlters.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground font-body italic">Les pages de ce chapitre sont encore vierges…</p>
+        </div>
+      )}
 
       <AnimatePresence>
         {selectedAlter && (

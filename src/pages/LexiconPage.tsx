@@ -1,7 +1,8 @@
 import { useSystem } from '@/contexts/SystemContext';
-import { BookOpen, Search } from 'lucide-react';
+import { BookOpen, Search, BookOpenCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useMemo } from 'react';
+import PageHeader from '@/components/PageHeader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,15 +34,7 @@ export default function LexiconPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-8">
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Lexique</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-        <p className="text-sm text-muted-foreground font-body italic">Glossaire des termes utilisés dans ce grimoire</p>
-      </motion.div>
+      <PageHeader title="Lexique" subtitle="Glossaire des termes inscrits dans ce grimoire" icon={BookOpenCheck} chapter="Chapitre VIII" />
 
       {/* Search */}
       <motion.div
@@ -65,8 +58,8 @@ export default function LexiconPage() {
       {/* Entries */}
       {filtered.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-          <BookOpen className="w-8 h-8 text-muted-foreground/30 mx-auto mb-3" />
-          <p className="text-muted-foreground font-body text-sm">
+          <BookOpen className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+          <p className="text-muted-foreground font-body italic">
             {search ? 'Aucun terme trouvé pour cette recherche.' : 'Le lexique est vide pour le moment.'}
           </p>
         </motion.div>
@@ -86,7 +79,7 @@ export default function LexiconPage() {
                   key={entry.id}
                   variants={itemVariants}
                   whileHover={{ x: 6, transition: { duration: 0.2 } }}
-                  className="card-grimoire p-4 hover-ember"
+                  className="card-grimoire rune-corners p-4 hover-ember"
                 >
                   <h3 className="font-display text-foreground text-sm tracking-wide mb-1">{entry.term}</h3>
                   <p className="text-sm text-muted-foreground font-body leading-relaxed">{entry.definition}</p>

@@ -1,6 +1,7 @@
 import { useSystem } from '@/contexts/SystemContext';
 import { Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PageHeader from '@/components/PageHeader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -18,24 +19,26 @@ export default function CitationsPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-8">
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Citations</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-      </motion.div>
+      <PageHeader title="Citations" subtitle="Paroles inscrites dans l'encre du grimoire" icon={Quote} chapter="Chapitre IV" />
 
       <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
         {publicCitations.map(c => (
-          <motion.div key={c.id} variants={itemVariants} whileHover={{ scale: 1.01, transition: { duration: 0.2 } }} className="card-grimoire p-6 text-center hover-ember">
+          <motion.div key={c.id} variants={itemVariants} whileHover={{ scale: 1.01, transition: { duration: 0.2 } }} className="card-grimoire rune-corners p-6 text-center hover-ember relative">
+            {/* Decorative quote marks */}
+            <div className="absolute top-3 left-4 text-gold/8 font-display text-4xl leading-none">«</div>
+            <div className="absolute bottom-3 right-4 text-gold/8 font-display text-4xl leading-none">»</div>
+            
             <Quote className="w-5 h-5 text-primary/30 mx-auto mb-3" />
-            <blockquote className="text-lg font-body italic text-foreground/80 mb-2 animate-quill">"{c.text}"</blockquote>
+            <blockquote className="text-lg font-body italic text-foreground/80 mb-2 px-6">« {c.text} »</blockquote>
+            <div className="w-12 h-px mx-auto my-3" style={{ background: 'linear-gradient(90deg, transparent, hsla(350, 60%, 45%, 0.3), transparent)' }} />
             <p className="text-sm text-muted-foreground font-ui">— {getAlterName(c.alterId)} • {c.date}</p>
           </motion.div>
         ))}
         {publicCitations.length === 0 && (
-          <p className="text-center text-muted-foreground font-body py-12">Aucune citation pour le moment.</p>
+          <div className="text-center py-12">
+            <Quote className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+            <p className="text-muted-foreground font-body italic">Aucune parole n'a encore été inscrite…</p>
+          </div>
         )}
       </motion.div>
     </div>

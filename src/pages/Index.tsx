@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Map, Quote } from 'lucide-react';
+import { Users, BookOpen, Map, Quote, Moon } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,48 +25,70 @@ export default function HomePage() {
   const frontAlter = alters.find(a => a.id === systemInfo.currentFrontAlterId);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-10">
-      {/* Floating embers */}
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full pointer-events-none"
-          style={{
-            left: `${15 + i * 18}%`,
-            top: `${20 + i * 8}%`,
-            background: i % 2 === 0 ? 'hsla(40, 70%, 50%, 0.25)' : 'hsla(350, 60%, 45%, 0.2)',
-          }}
-          animate={{ y: [0, -30, 0], opacity: [0.1, 0.5, 0.1], scale: [1, 1.8, 1] }}
-          transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 }}
-        />
-      ))}
-
+    <div className="max-w-4xl mx-auto space-y-10 relative">
       {/* Hero */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="text-center py-12"
+        className="text-center py-12 relative"
       >
-        <motion.h1
-          className="text-4xl md:text-6xl font-display text-glow tracking-wider mb-4 animate-quill"
+        {/* Mystical moon emblem */}
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 150 }}
+          className="mx-auto mb-4 w-16 h-16 rounded-full border border-gold/20 flex items-center justify-center relative"
+          style={{ boxShadow: '0 0 40px hsla(40, 70%, 50%, 0.15), inset 0 0 20px hsla(270, 30%, 20%, 0.3)' }}
         >
-          {systemInfo.name}
-        </motion.h1>
-        <motion.div
-          className="divider-ornate w-48 mx-auto mb-2"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.4, duration: 0.7 }}
-        />
-        <motion.div
-          className="flex justify-center mb-6"
+          <Moon className="w-7 h-7 text-gold/60" />
+          <motion.div
+            className="absolute inset-0 rounded-full border border-gold/10"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          />
+        </motion.div>
+
+        {/* Rune decoration */}
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.2 }}
+          className="text-[9px] font-display text-gold/20 tracking-[0.8em] mb-4 select-none"
         >
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
+          ᚦ ᚢ ᚱ ᛊ ᚨ ᛉ
+        </motion.p>
+
+        <motion.h1 className="text-4xl md:text-6xl font-display text-glow tracking-wider mb-4 animate-quill">
+          {systemInfo.name}
+        </motion.h1>
+
+        {/* Moon phase divider */}
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <motion.div
+            className="h-px w-20"
+            style={{ background: 'linear-gradient(90deg, transparent, hsla(40, 70%, 50%, 0.4))' }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.7 }}
+          />
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-[9px] text-gold/25 tracking-[0.2em]"
+          >
+            🌑 ◦ 🌒 ◦ 🌕 ◦ 🌘 ◦ 🌑
+          </motion.span>
+          <motion.div
+            className="h-px w-20"
+            style={{ background: 'linear-gradient(90deg, hsla(40, 70%, 50%, 0.4), transparent)' }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.7 }}
+          />
+        </div>
+
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -84,7 +106,7 @@ export default function HomePage() {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mt-8 mx-auto max-w-2xl"
           >
-            <div className="card-grimoire p-2 overflow-hidden">
+            <div className="card-grimoire rune-corners p-2 overflow-hidden aura-glow">
               <img
                 src={systemInfo.homepageImage}
                 alt={systemInfo.name}
@@ -95,13 +117,11 @@ export default function HomePage() {
         )}
       </motion.div>
 
+      {/* Serpent divider */}
+      <div className="divider-serpent" />
+
       {/* Stats row */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="grid grid-cols-2 md:grid-cols-4 gap-4"
-      >
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Alters', value: publicAlters.length, icon: Users },
           { label: 'Au front', value: frontAlter?.name || '—', icon: null },
@@ -112,7 +132,7 @@ export default function HomePage() {
             key={i}
             variants={itemVariants}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="card-grimoire p-4 text-center hover-ember"
+            className="card-grimoire rune-corners p-4 text-center hover-ember"
           >
             <p className="text-xs font-ui text-muted-foreground uppercase tracking-widest mb-1">{stat.label}</p>
             <p className="text-xl font-display text-foreground">{stat.value}</p>
@@ -126,9 +146,12 @@ export default function HomePage() {
           initial={{ opacity: 0, x: -12, filter: 'blur(3px)' }}
           animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="card-grimoire p-6 hover-ember"
+          className="card-grimoire rune-corners p-6 hover-ember border-l-2 border-rose-noir"
         >
-          <h2 className="font-display text-lg text-gold mb-3">Dernière entrée du journal</h2>
+          <div className="flex items-center gap-2 mb-3">
+            <BookOpen className="w-4 h-4 text-gold/50" />
+            <h2 className="font-display text-lg text-gold">Dernière entrée du journal</h2>
+          </div>
           <h3 className="font-body text-xl text-foreground mb-1">{lastEntry.title}</h3>
           <p className="text-sm text-muted-foreground font-ui mb-2">{lastEntry.date} • {getAlterName(lastEntry.alterId)}</p>
           <p className="text-foreground/70 font-body line-clamp-3">{lastEntry.content}</p>
@@ -141,13 +164,15 @@ export default function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.6 }}
-          className="text-center py-6"
+          className="text-center py-6 relative"
         >
-          <Quote className="w-6 h-6 text-primary/40 mx-auto mb-3" />
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-px h-6" style={{ background: 'linear-gradient(180deg, transparent, hsla(350, 60%, 45%, 0.3))' }} />
+          <Quote className="w-6 h-6 text-primary/40 mx-auto mb-3 mt-4" />
           <blockquote className="text-xl font-body italic text-foreground/80 max-w-lg mx-auto animate-quill">
-            "{lastCitation.text}"
+            « {lastCitation.text} »
           </blockquote>
           <p className="text-sm text-muted-foreground font-ui mt-2">— {getAlterName(lastCitation.alterId)}</p>
+          <div className="mt-3 text-gold/15 text-[8px] tracking-[0.5em] font-display">🥀 🥀 🥀</div>
         </motion.div>
       )}
 
@@ -159,7 +184,7 @@ export default function HomePage() {
         transition={{ delay: 0.9 }}
       >
         <div className="flex-1 divider-ornate" />
-        <span className="text-[10px] text-gold/40 font-display tracking-widest">EXPLORER</span>
+        <span className="text-[10px] text-gold/40 font-display tracking-widest">EXPLORER LE GRIMOIRE</span>
         <div className="flex-1 divider-ornate" />
       </motion.div>
 
@@ -168,12 +193,12 @@ export default function HomePage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="flex flex-wrap justify-center gap-4"
+        className="flex flex-wrap justify-center gap-4 pb-6"
       >
         {[
-          { to: '/alters', icon: Users, label: 'Voir les alters' },
-          { to: '/journal', icon: BookOpen, label: 'Lire le journal' },
-          { to: '/monde-interieur', icon: Map, label: 'Explorer le monde intérieur' },
+          { to: '/alters', icon: Users, label: 'Les Alters' },
+          { to: '/journal', icon: BookOpen, label: 'Le Journal' },
+          { to: '/monde-interieur', icon: Map, label: 'Monde Intérieur' },
         ].map(btn => (
           <motion.div key={btn.to} variants={itemVariants}>
             <Link to={btn.to} className="btn-grimoire flex items-center gap-2">
@@ -181,6 +206,16 @@ export default function HomePage() {
             </Link>
           </motion.div>
         ))}
+      </motion.div>
+
+      {/* Bottom rune decoration */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="text-center pb-4"
+      >
+        <p className="text-[8px] font-display text-gold/10 tracking-[1em] select-none">ᛟ ᛉ ᚨ ᛊ ᛟ</p>
       </motion.div>
     </div>
   );

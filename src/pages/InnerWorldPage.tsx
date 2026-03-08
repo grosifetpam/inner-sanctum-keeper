@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin } from 'lucide-react';
+import { X, MapPin, Map } from 'lucide-react';
 import type { InnerWorldPlace } from '@/types/system';
+import PageHeader from '@/components/PageHeader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -21,14 +22,7 @@ export default function InnerWorldPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-8">
-        <h1 className="text-3xl font-display text-glow tracking-wider mb-2 animate-quill">Monde Intérieur</h1>
-        <motion.div className="divider-ornate w-32 mx-auto mb-2" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.3, duration: 0.6 }} />
-        <motion.div className="flex justify-center mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <span className="text-[8px] text-gold/30 tracking-[0.5em] font-display">✦ ✦ ✦</span>
-        </motion.div>
-        <p className="text-muted-foreground font-body">Les lieux qui composent notre paysage intérieur</p>
-      </motion.div>
+      <PageHeader title="Monde Intérieur" subtitle="Les lieux qui composent notre paysage intérieur" icon={Map} chapter="Chapitre III" />
 
       <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {publicPlaces.map(place => (
@@ -37,10 +31,13 @@ export default function InnerWorldPage() {
             variants={cardVariants}
             whileHover={{ y: -6, transition: { duration: 0.2 } }}
             onClick={() => setSelectedPlace(place)}
-            className="card-grimoire overflow-hidden cursor-pointer hover:border-primary/30 transition-all hover-ember"
+            className="card-grimoire rune-corners overflow-hidden cursor-pointer hover:border-primary/30 transition-all hover-ember"
           >
             {place.image && (
-              <img src={place.image} alt={place.name} className="w-full h-40 object-cover" />
+              <div className="relative">
+                <img src={place.image} alt={place.name} className="w-full h-40 object-cover" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 50%, hsla(240, 10%, 6%, 0.8) 100%)' }} />
+              </div>
             )}
             <div className="p-5">
               <div className="flex items-start gap-3">
@@ -62,6 +59,13 @@ export default function InnerWorldPage() {
         ))}
       </motion.div>
 
+      {publicPlaces.length === 0 && (
+        <div className="text-center py-12">
+          <Map className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+          <p className="text-muted-foreground font-body italic">Ce monde reste encore à cartographier…</p>
+        </div>
+      )}
+
       <AnimatePresence>
         {selectedPlace && (
           <motion.div
@@ -75,7 +79,7 @@ export default function InnerWorldPage() {
               exit={{ opacity: 0, scaleY: 0.1, scaleX: 0.85 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: 'top center' }}
-              className="card-grimoire overflow-hidden max-w-lg w-full relative"
+              className="card-grimoire rune-corners overflow-hidden max-w-lg w-full relative aura-glow"
               onClick={e => e.stopPropagation()}
             >
               <motion.div
@@ -86,7 +90,10 @@ export default function InnerWorldPage() {
                 transition={{ delay: 0.3, duration: 0.5 }}
               />
               {selectedPlace.image && (
-                <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover" />
+                <div className="relative">
+                  <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover" />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 40%, hsla(240, 10%, 6%, 0.9) 100%)' }} />
+                </div>
               )}
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -94,15 +101,20 @@ export default function InnerWorldPage() {
                   <button onClick={() => setSelectedPlace(null)} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
                 </div>
                 <div className="divider-ornate mb-4" />
-                <p className="font-body text-foreground/80 mb-4">{selectedPlace.description}</p>
-                <h4 className="text-xs font-ui text-gold uppercase tracking-widest mb-1">Signification</h4>
-                <p className="text-sm font-body text-foreground/70 mb-4">{selectedPlace.significance}</p>
+                <p className="font-body text-foreground/80 mb-4 leading-relaxed">{selectedPlace.description}</p>
+                {selectedPlace.significance && (
+                  <>
+                    <h4 className="text-xs font-ui text-gold uppercase tracking-widest mb-1">Signification</h4>
+                    <p className="text-sm font-body text-foreground/70 mb-4">{selectedPlace.significance}</p>
+                  </>
+                )}
                 <h4 className="text-xs font-ui text-gold uppercase tracking-widest mb-1">Alters liés</h4>
                 <div className="flex gap-2">
                   {selectedPlace.linkedAlterIds.map(id => (
                     <span key={id} className="text-sm font-ui text-primary">{getAlterName(id)}</span>
                   ))}
                 </div>
+                <div className="divider-serpent mt-4" />
               </div>
             </motion.div>
           </motion.div>
