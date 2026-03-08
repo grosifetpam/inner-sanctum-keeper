@@ -91,7 +91,10 @@ export default function GrimoireOpening({
             />
 
             {/* Front cover */}
-            <div className="grimoire-cover w-[280px] sm:w-[360px] md:w-[420px] aspect-[3/4] flex flex-col items-center justify-center p-8 relative" style={{ borderLeft: 'none', borderRadius: '0 12px 12px 0' }}>
+            <div className="grimoire-cover w-[280px] sm:w-[360px] md:w-[420px] aspect-[3/4] flex flex-col items-center justify-center p-8 relative overflow-hidden" style={{ borderLeft: 'none', borderRadius: '0 12px 12px 0' }}>
+              {/* Custom background image */}
+              <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: "url('/images/grimoire-cover-bg.jpg')" }} />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background/60" />
               {/* Ornamental corners */}
               <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-gold/20" />
               <div className="absolute top-4 right-4 w-10 h-10 border-t-2 border-r-2 border-gold/20" />
