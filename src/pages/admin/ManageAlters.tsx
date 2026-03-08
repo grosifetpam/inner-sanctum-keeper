@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import type { Alter, AlterRole } from '@/types/system';
-import { Plus, Trash2, Edit2, X, Eye, EyeOff, Upload, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Eye, EyeOff, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { uploadImage, deleteImage } from '@/lib/storage';
 
 const roleTypes: AlterRole[] = ['hôte', 'protecteur', 'persécuteur', 'gardien', 'observateur', 'trauma holder', 'autre'];
 
@@ -11,9 +12,10 @@ const emptyAlter: Omit<Alter, 'id'> = {
 };
 
 export default function ManageAlters() {
-  const { data, addAlter, updateAlter, deleteAlter } = useSystem();
+  const { data, addAlter, updateAlter, deleteAlter, user } = useSystem();
   const [editing, setEditing] = useState<Alter | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const startNew = () => {
@@ -33,18 +35,27 @@ export default function ManageAlters() {
     setEditing(null);
   };
 
-  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !editing) return;
+    if (!file || !editing || !user) return;
     if (!file.type.startsWith('image/')) return;
-    if (file.size > 5 * 1024 * 1024) return; // 5MB limit
+    if (file.size > 5 * 1024 * 1024) return;
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      setEditing(prev => prev ? { ...prev, avatar: dataUrl } : null);
-    };
-    reader.readAsDataURL(file);
+    setUploading(true);
+    try {
+      // Delete old avatar if it's a storage URL
+      if (editing.avatar) await deleteImage('avatars', editing.avatar);
+      const url = await uploadImage('avatars', user.id, file);
+      if (url) setEditing(prev => prev ? { ...prev, avatar: url } : null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeAvatar = async () => {
+    if (!editing) return;
+    if (editing.avatar) await deleteImage('avatars', editing.avatar);
+    setEditing(prev => prev ? { ...prev, avatar: '' } : null);
   };
 
   const field = (label: string, key: keyof Alter, textarea = false) => (
@@ -86,7 +97,9 @@ export default function ManageAlters() {
           <div className="flex items-center gap-4 mb-6">
             <div className="relative group">
               <div className="w-20 h-20 rounded-full overflow-hidden bg-card border-2 border-border flex items-center justify-center">
-                {editing.avatar ? (
+                {uploading ? (
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                ) : editing.avatar ? (
                   <img src={editing.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   <ImageIcon className="w-8 h-8 text-muted-foreground" />
@@ -94,6 +107,7 @@ export default function ManageAlters() {
               </div>
               <button
                 onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
                 className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
               >
                 <Upload className="w-5 h-5 text-foreground" />
@@ -104,8 +118,7 @@ export default function ManageAlters() {
               <p className="text-sm font-ui text-foreground">Avatar</p>
               <p className="text-xs text-muted-foreground">Cliquer pour uploader (max 5 Mo)</p>
               {editing.avatar && (
-                <button onClick={() => setEditing(prev => prev ? { ...prev, avatar: '' } : null)}
-                  className="text-xs text-destructive hover:underline mt-1">Supprimer l'avatar</button>
+                <button onClick={removeAvatar} className="text-xs text-destructive hover:underline mt-1">Supprimer l'avatar</button>
               )}
             </div>
           </div>

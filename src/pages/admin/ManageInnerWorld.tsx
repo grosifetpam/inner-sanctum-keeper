@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSystem } from '@/contexts/SystemContext';
 import type { InnerWorldPlace } from '@/types/system';
-import { Plus, Trash2, Edit2, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { uploadImage, deleteImage } from '@/lib/storage';
 
 export default function ManageInnerWorld() {
-  const { data, addInnerWorldPlace, updateInnerWorldPlace, deleteInnerWorldPlace, getAlterName } = useSystem();
+  const { data, addInnerWorldPlace, updateInnerWorldPlace, deleteInnerWorldPlace, getAlterName, user } = useSystem();
   const [editing, setEditing] = useState<InnerWorldPlace | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const startNew = () => {
     setEditing({ id: crypto.randomUUID(), name: '', description: '', image: '', significance: '', linkedAlterIds: [], isPublic: true });
@@ -28,6 +31,28 @@ export default function ManageInnerWorld() {
     setEditing({ ...editing, linkedAlterIds: ids });
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editing || !user) return;
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 10 * 1024 * 1024) return;
+
+    setUploading(true);
+    try {
+      if (editing.image) await deleteImage('inner-world', editing.image);
+      const url = await uploadImage('inner-world', user.id, file);
+      if (url) setEditing(prev => prev ? { ...prev, image: url } : null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = async () => {
+    if (!editing) return;
+    if (editing.image) await deleteImage('inner-world', editing.image);
+    setEditing(prev => prev ? { ...prev, image: '' } : null);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -42,6 +67,34 @@ export default function ManageInnerWorld() {
             <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
           </div>
           <div className="space-y-3">
+            {/* Image upload */}
+            <div>
+              <label className="text-xs font-ui text-muted-foreground uppercase tracking-wider">Image du lieu</label>
+              <div className="mt-2 relative group w-full h-40 rounded-lg overflow-hidden bg-card border border-border flex items-center justify-center">
+                {uploading ? (
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                ) : editing.image ? (
+                  <img src={editing.image} alt="Lieu" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <ImageIcon className="w-8 h-8" />
+                    <span className="text-xs">Cliquer pour ajouter</span>
+                  </div>
+                )}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                >
+                  <Upload className="w-6 h-6 text-foreground" />
+                </button>
+                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              </div>
+              {editing.image && (
+                <button onClick={removeImage} className="text-xs text-destructive hover:underline mt-1">Supprimer l'image</button>
+              )}
+            </div>
+
             <input value={editing.name} onChange={e => setEditing({ ...editing, name: e.target.value })} placeholder="Nom du lieu"
               className="w-full bg-input border border-border rounded px-3 py-2 text-sm font-ui text-foreground" />
             <textarea value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} placeholder="Description"
@@ -67,9 +120,12 @@ export default function ManageInnerWorld() {
       <div className="space-y-2">
         {data.innerWorld.map(p => (
           <div key={p.id} className="card-grimoire p-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-ui text-foreground">{p.name}</p>
-              <p className="text-xs text-muted-foreground">{p.linkedAlterIds.map(id => getAlterName(id)).join(', ')}</p>
+            <div className="flex items-center gap-3">
+              {p.image && <img src={p.image} alt={p.name} className="w-10 h-10 rounded object-cover" />}
+              <div>
+                <p className="text-sm font-ui text-foreground">{p.name}</p>
+                <p className="text-xs text-muted-foreground">{p.linkedAlterIds.map(id => getAlterName(id)).join(', ')}</p>
+              </div>
             </div>
             <div className="flex gap-2">
               <button onClick={() => { setEditing({ ...p }); setIsNew(false); }} className="text-muted-foreground hover:text-foreground"><Edit2 className="w-4 h-4" /></button>
