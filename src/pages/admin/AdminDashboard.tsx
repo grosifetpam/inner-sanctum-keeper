@@ -112,6 +112,45 @@ const statVariants = {
 export default function AdminDashboard() {
   const { data, getAlterName } = useSystem();
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+  const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchCompletions = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) { setLoading(false); return; }
+      const { data: completions } = await supabase
+        .from('exercise_completions')
+        .select('exercise_id')
+        .eq('user_id', session.session.user.id);
+      if (completions) {
+        setCompletedExercises(new Set(completions.map(c => c.exercise_id)));
+      }
+      setLoading(false);
+    };
+    fetchCompletions();
+  }, []);
+
+  const toggleExercise = async (exerciseId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const { data: session } = await supabase.auth.getSession();
+    if (!session.session) return;
+    const userId = session.session.user.id;
+    const isCompleted = completedExercises.has(exerciseId);
+
+    if (isCompleted) {
+      await supabase.from('exercise_completions').delete().eq('user_id', userId).eq('exercise_id', exerciseId);
+      setCompletedExercises(prev => { const n = new Set(prev); n.delete(exerciseId); return n; });
+      toast({ title: 'Exercice remis en cours' });
+    } else {
+      await supabase.from('exercise_completions').insert({ user_id: userId, exercise_id: exerciseId });
+      setCompletedExercises(prev => new Set(prev).add(exerciseId));
+      toast({ title: '✨ Exercice complété !' });
+    }
+  };
+
+  const progressPercent = exercises.length > 0 ? Math.round((completedExercises.size / exercises.length) * 100) : 0;
 
   const stats = [
     { value: data.alters.length, label: 'Alters', accent: false },
