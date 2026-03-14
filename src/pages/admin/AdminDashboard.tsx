@@ -249,7 +249,6 @@ export default function AdminDashboard() {
         ))}
       </motion.div>
 
-      {/* Exercises section */}
       <motion.div
         className="mb-6 flex items-center gap-3"
         initial={{ opacity: 0 }}
@@ -261,68 +260,117 @@ export default function AdminDashboard() {
         <div className="flex-1 divider-ornate" />
       </motion.div>
 
+      {/* Progress bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9 }}
+        className="card-grimoire p-4 mb-4"
+      >
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-gold" />
+            <span className="text-xs font-ui text-foreground">Progression</span>
+          </div>
+          <span className="text-xs font-display text-gold">{completedExercises.size}/{exercises.length}</span>
+        </div>
+        <div className="w-full h-2 rounded-full bg-muted/50 overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            style={{ background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))' }}
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPercent}%` }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          />
+        </div>
+        {progressPercent === 100 && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[10px] text-gold/60 font-display tracking-widest text-center mt-2"
+          >
+            ✦ TOUS LES EXERCICES COMPLÉTÉS ✦
+          </motion.p>
+        )}
+      </motion.div>
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="grid grid-cols-1 sm:grid-cols-2 gap-3"
       >
-        {exercises.map((ex) => (
-          <motion.div key={ex.id} variants={itemVariants}>
-            <motion.button
-              onClick={() => setExpandedExercise(expandedExercise === ex.id ? null : ex.id)}
-              className="card-grimoire p-4 w-full text-left relative overflow-hidden group hover-ember transition-all duration-300 hover:border-primary/30"
-              layout
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-2">
-                  <motion.div
-                    whileHover={{ rotate: 15, scale: 1.2 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  >
-                    <ex.icon className="w-5 h-5 text-gold flex-shrink-0" />
-                  </motion.div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-ui text-foreground">{ex.title}</h3>
-                    <span className="text-[10px] text-muted-foreground font-ui">⏱ {ex.duration}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">{ex.description}</p>
-
-                <AnimatePresence>
-                  {expandedExercise === ex.id && (
+        {exercises.map((ex) => {
+          const isCompleted = completedExercises.has(ex.id);
+          return (
+            <motion.div key={ex.id} variants={itemVariants}>
+              <motion.button
+                onClick={() => setExpandedExercise(expandedExercise === ex.id ? null : ex.id)}
+                className={`card-grimoire p-4 w-full text-left relative overflow-hidden group hover-ember transition-all duration-300 hover:border-primary/30 ${isCompleted ? 'border-gold/20' : ''}`}
+                layout
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {isCompleted && <div className="absolute inset-0 bg-gold/[0.03]" />}
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-2">
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="overflow-hidden"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
                     >
-                      <div className="mt-3 pt-3 border-t border-border/50">
-                        <p className="text-[10px] text-gold/60 font-display tracking-widest mb-2">ÉTAPES</p>
-                        <ol className="space-y-1.5">
-                          {ex.steps.map((step, i) => (
-                            <motion.li
-                              key={i}
-                              initial={{ opacity: 0, x: -8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: i * 0.08 }}
-                              className="text-xs text-foreground/80 flex gap-2"
-                            >
-                              <span className="text-gold/50 font-display text-[10px] mt-0.5">{i + 1}.</span>
-                              {step}
-                            </motion.li>
-                          ))}
-                        </ol>
-                      </div>
+                      <ex.icon className={`w-5 h-5 flex-shrink-0 ${isCompleted ? 'text-gold/50' : 'text-gold'}`} />
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.button>
-          </motion.div>
-        ))}
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`text-sm font-ui ${isCompleted ? 'text-foreground/60 line-through' : 'text-foreground'}`}>{ex.title}</h3>
+                      <span className="text-[10px] text-muted-foreground font-ui">⏱ {ex.duration}</span>
+                    </div>
+                    <motion.div
+                      onClick={(e) => toggleExercise(ex.id, e)}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="cursor-pointer"
+                    >
+                      {isCompleted
+                        ? <CheckCircle2 className="w-5 h-5 text-gold" />
+                        : <Circle className="w-5 h-5 text-muted-foreground/40 hover:text-gold/60 transition-colors" />
+                      }
+                    </motion.div>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{ex.description}</p>
+
+                  <AnimatePresence>
+                    {expandedExercise === ex.id && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <p className="text-[10px] text-gold/60 font-display tracking-widest mb-2">ÉTAPES</p>
+                          <ol className="space-y-1.5">
+                            {ex.steps.map((step, i) => (
+                              <motion.li
+                                key={i}
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.08 }}
+                                className="text-xs text-foreground/80 flex gap-2"
+                              >
+                                <span className="text-gold/50 font-display text-[10px] mt-0.5">{i + 1}.</span>
+                                {step}
+                              </motion.li>
+                            ))}
+                          </ol>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.button>
+            </motion.div>
+          );
+        })}
       </motion.div>
     </div>
   );
