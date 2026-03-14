@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles, Compass, PenLine, MessageCircle, Eye, Palette, Music } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, containerVariants, itemVariants, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
+import { useState } from 'react';
 
 const shortcuts = [
   { path: '/admin/alters', label: 'Gérer les alters', icon: Users, desc: 'Ajouter, modifier, supprimer' },
@@ -17,6 +18,87 @@ const shortcuts = [
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings, desc: 'Infos du système' },
 ];
 
+const exercises = [
+  {
+    id: 'journal-libre',
+    title: 'Écriture libre intérieure',
+    icon: PenLine,
+    duration: '10-15 min',
+    description: 'Prenez un carnet et écrivez sans réfléchir. Laissez chaque alter s\'exprimer librement — changements d\'écriture, de ton ou de sujet sont bienvenus.',
+    steps: [
+      'Installez-vous dans un endroit calme',
+      'Écrivez "Qui veut s\'exprimer aujourd\'hui ?" en haut de la page',
+      'Laissez votre main écrire sans censure pendant 10 minutes',
+      'Relisez et notez les changements de style ou de voix',
+    ],
+  },
+  {
+    id: 'dialogue-interieur',
+    title: 'Dialogue intérieur',
+    icon: MessageCircle,
+    duration: '15-20 min',
+    description: 'Engagez une conversation écrite avec un alter. Posez des questions et laissez les réponses venir naturellement.',
+    steps: [
+      'Choisissez un alter que vous souhaitez mieux connaître',
+      'Écrivez-lui une question simple (ex: "Comment te sens-tu ?")',
+      'Attendez une réponse intérieure et notez-la',
+      'Continuez le dialogue sans juger les réponses',
+    ],
+  },
+  {
+    id: 'visualisation',
+    title: 'Exploration du monde intérieur',
+    icon: Eye,
+    duration: '15-30 min',
+    description: 'Fermez les yeux et visualisez votre espace intérieur. Explorez les lieux et rencontrez les alters qui s\'y trouvent.',
+    steps: [
+      'Fermez les yeux et respirez profondément 5 fois',
+      'Imaginez une porte vers votre monde intérieur',
+      'Explorez l\'espace — notez les lieux, couleurs, sensations',
+      'Si un alter se présente, observez son apparence et son énergie',
+    ],
+  },
+  {
+    id: 'art-expressif',
+    title: 'Art expressif',
+    icon: Palette,
+    duration: '20-30 min',
+    description: 'Laissez chaque alter choisir des couleurs et dessiner librement. L\'art révèle ce que les mots ne peuvent pas dire.',
+    steps: [
+      'Préparez du matériel de dessin (crayons, peinture, etc.)',
+      'Invitez un alter à choisir les couleurs qui lui parlent',
+      'Dessinez sans objectif précis — formes, abstractions, symboles',
+      'Notez quel alter s\'est exprimé et ce que le dessin évoque',
+    ],
+  },
+  {
+    id: 'playlist-alter',
+    title: 'Playlist d\'identification',
+    icon: Music,
+    duration: '15-20 min',
+    description: 'Écoutez différents styles de musique et notez les réactions intérieures. Chaque alter a souvent ses propres goûts.',
+    steps: [
+      'Créez une playlist variée (calme, énergique, triste, joyeuse)',
+      'Écoutez chaque morceau et notez vos réactions émotionnelles',
+      'Observez si certains morceaux "appellent" un alter spécifique',
+      'Créez une mini-playlist pour chaque alter identifié',
+    ],
+  },
+  {
+    id: 'scan-corporel',
+    title: 'Scan corporel conscient',
+    icon: Compass,
+    duration: '10-15 min',
+    description: 'Les alters se manifestent souvent par des sensations corporelles. Ce scan aide à identifier ces signaux.',
+    steps: [
+      'Allongez-vous confortablement et fermez les yeux',
+      'Scannez votre corps de la tête aux pieds',
+      'Notez les zones de tension, chaleur ou picotements',
+      'Demandez intérieurement : "Qui est présent dans cette sensation ?"',
+    ],
+  },
+];
+
 const statVariants = {
   hidden: { opacity: 0, scale: 0.8, rotateX: -20 },
   visible: (i: number) => ({
@@ -27,6 +109,7 @@ const statVariants = {
 
 export default function AdminDashboard() {
   const { data, getAlterName } = useSystem();
+  const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
 
   const stats = [
     { value: data.alters.length, label: 'Alters', accent: false },
@@ -63,7 +146,7 @@ export default function AdminDashboard() {
 
       <AdminPageHeader title="Tableau de bord" icon={Sparkles} />
 
-      {/* Stats — grimoire page sections */}
+      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8" style={{ perspective: '600px' }}>
         {stats.map((stat, i) => (
           <motion.div
@@ -100,7 +183,7 @@ export default function AdminDashboard() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8"
       >
         {shortcuts.map((s) => (
           <motion.div key={s.path} variants={itemVariants}>
@@ -121,6 +204,82 @@ export default function AdminDashboard() {
                 <p className="text-xs text-muted-foreground">{s.desc}</p>
               </div>
             </Link>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Exercises section */}
+      <motion.div
+        className="mb-6 flex items-center gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+      >
+        <div className="flex-1 divider-ornate" />
+        <span className="text-[10px] text-gold/40 font-display tracking-widest">EXERCICES DE DÉCOUVERTE</span>
+        <div className="flex-1 divider-ornate" />
+      </motion.div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+      >
+        {exercises.map((ex) => (
+          <motion.div key={ex.id} variants={itemVariants}>
+            <motion.button
+              onClick={() => setExpandedExercise(expandedExercise === ex.id ? null : ex.id)}
+              className="card-grimoire p-4 w-full text-left relative overflow-hidden group hover-ember transition-all duration-300 hover:border-primary/30"
+              layout
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-2">
+                  <motion.div
+                    whileHover={{ rotate: 15, scale: 1.2 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <ex.icon className="w-5 h-5 text-gold flex-shrink-0" />
+                  </motion.div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-ui text-foreground">{ex.title}</h3>
+                    <span className="text-[10px] text-muted-foreground font-ui">⏱ {ex.duration}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">{ex.description}</p>
+
+                <AnimatePresence>
+                  {expandedExercise === ex.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-3 pt-3 border-t border-border/50">
+                        <p className="text-[10px] text-gold/60 font-display tracking-widest mb-2">ÉTAPES</p>
+                        <ol className="space-y-1.5">
+                          {ex.steps.map((step, i) => (
+                            <motion.li
+                              key={i}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: i * 0.08 }}
+                              className="text-xs text-foreground/80 flex gap-2"
+                            >
+                              <span className="text-gold/50 font-display text-[10px] mt-0.5">{i + 1}.</span>
+                              {step}
+                            </motion.li>
+                          ))}
+                        </ol>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.button>
           </motion.div>
         ))}
       </motion.div>
