@@ -99,6 +99,27 @@ const exercises = [
       'Demandez intérieurement : "Qui est présent dans cette sensation ?"',
     ],
   },
+  {
+    id: 'questions-decouverte',
+    title: 'Questions pour découvrir un alter',
+    icon: HelpCircle,
+    duration: '20-30 min',
+    description: 'Une série de questions ciblées à poser intérieurement ou par écrit pour faire connaissance avec un alter nouvellement perçu.',
+    steps: [
+      'Comment veux-tu qu\'on t\'appelle ?',
+      'Quel âge as-tu (ou quel âge ressens-tu) ?',
+      'Quels pronoms préfères-tu ?',
+      'Quel est ton rôle dans le système ?',
+      'Depuis combien de temps es-tu là ?',
+      'Y a-t-il un lieu dans le monde intérieur qui est le tien ?',
+      'Qu\'est-ce que tu aimes ? Qu\'est-ce que tu n\'aimes pas ?',
+      'De quoi as-tu besoin en ce moment ?',
+      'Y a-t-il des alters avec qui tu t\'entends bien (ou mal) ?',
+      'Qu\'est-ce que tu aimerais que le système sache sur toi ?',
+      'As-tu des souvenirs ou émotions que tu portes ?',
+      'Comment te manifestes-tu (sensations, pensées, émotions) ?',
+    ],
+  },
 ];
 
 const statVariants = {
