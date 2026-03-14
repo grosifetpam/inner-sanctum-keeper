@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles, Compass, PenLine, MessageCircle, Eye, Palette, Music } from 'lucide-react';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles, Compass, PenLine, MessageCircle, Eye, Palette, Music, CheckCircle2, Circle, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, containerVariants, itemVariants, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const shortcuts = [
   { path: '/admin/alters', label: 'Gérer les alters', icon: Users, desc: 'Ajouter, modifier, supprimer' },
