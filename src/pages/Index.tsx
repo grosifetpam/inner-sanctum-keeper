@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Map, Quote, Moon } from 'lucide-react';
+import { Users, BookOpen, Map, Quote, Moon, ScrollText } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
