@@ -34,6 +34,8 @@ import ManageFront from "./pages/admin/ManageFront";
 import ManageRelations from "./pages/admin/ManageRelations";
 import ManageSystem from "./pages/admin/ManageSystem";
 import ManageCartography from "./pages/admin/ManageCartography";
+import ManageRules from "./pages/admin/ManageRules";
+import RulesPage from "./pages/RulesPage";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,7 @@ function AppRoutes() {
         <Route path="/lexique" element={<PublicRoute><LexiconPage /></PublicRoute>} />
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
         <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
+        <Route path="/reglement" element={<PublicRoute><RulesPage /></PublicRoute>} />
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />
@@ -88,6 +91,7 @@ function AppRoutes() {
         <Route path="/admin/relations" element={<ProtectedRoute><ManageRelations /></ProtectedRoute>} />
         <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
         <Route path="/admin/cartographie" element={<ProtectedRoute><ManageCartography /></ProtectedRoute>} />
+        <Route path="/admin/reglement" element={<ProtectedRoute><ManageRules /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

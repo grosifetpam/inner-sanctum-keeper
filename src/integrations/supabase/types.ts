@@ -383,6 +383,39 @@ export type Database = {
         }
         Relationships: []
       }
+      system_rules: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          is_public: boolean
+          sort_order: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          sort_order?: number
+          title?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          sort_order?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       timeline_events: {
         Row: {
           alter_id: string
