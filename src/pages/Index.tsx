@@ -199,6 +199,7 @@ export default function HomePage() {
           { to: '/alters', icon: Users, label: 'Les Alters', image: '/images/avatars/nyx.png' },
           { to: '/journal', icon: BookOpen, label: 'Le Journal', image: '/images/innerworld/bibliotheque-des-ombres.jpg' },
           { to: '/monde-interieur', icon: Map, label: 'Monde Intérieur', image: '/images/innerworld/forge-ignis.jpg' },
+          { to: '/reglement', icon: ScrollText, label: 'Règlement', image: '/images/parchment-dark.jpg' },
         ].map(btn => (
           <motion.div key={btn.to} variants={itemVariants} whileHover={{ y: -5 }}>
             <Link to={btn.to} className="block relative overflow-hidden rounded-xl border border-gold/20 aspect-[3/4] group shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_hsla(40,70%,50%,0.15)] transition-all duration-500 bg-black">
