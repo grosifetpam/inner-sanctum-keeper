@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
 import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck, Volume2, VolumeX } from 'lucide-react';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck, Volume2, VolumeX, ScrollText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTurnTransition from '@/components/PageTurnTransition';
 import GrimoireOpening from '@/components/GrimoireOpening';
