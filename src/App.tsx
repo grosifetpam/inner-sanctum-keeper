@@ -72,6 +72,7 @@ function AppRoutes() {
         <Route path="/lexique" element={<PublicRoute><LexiconPage /></PublicRoute>} />
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
         <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
+        <Route path="/reglement" element={<PublicRoute><RulesPage /></PublicRoute>} />
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />
