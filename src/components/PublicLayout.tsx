@@ -18,6 +18,7 @@ const navItems = [
   { path: '/lexique', label: 'Lexique', icon: BookOpenCheck },
   { path: '/chronologie', label: 'Chronologie', icon: Clock },
   { path: '/cartographie', label: 'Cartographie', icon: Brain },
+  { path: '/reglement', label: 'Règlement', icon: ScrollText },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

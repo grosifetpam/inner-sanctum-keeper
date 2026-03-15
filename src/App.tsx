@@ -91,6 +91,7 @@ function AppRoutes() {
         <Route path="/admin/relations" element={<ProtectedRoute><ManageRelations /></ProtectedRoute>} />
         <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
         <Route path="/admin/cartographie" element={<ProtectedRoute><ManageCartography /></ProtectedRoute>} />
+        <Route path="/admin/reglement" element={<ProtectedRoute><ManageRules /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

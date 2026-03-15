@@ -19,6 +19,7 @@ const adminNav = [
   { path: '/admin/front', label: 'Front Tracker', icon: Activity },
   { path: '/admin/relations', label: 'Relations', icon: GitBranch },
   { path: '/admin/cartographie', label: 'Cartographie', icon: Brain },
+  { path: '/admin/reglement', label: 'Règlement', icon: ScrollText },
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings },
 ];
 
