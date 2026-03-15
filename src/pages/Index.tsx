@@ -193,7 +193,7 @@ export default function HomePage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pb-6"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6"
       >
         {[
           { to: '/alters', icon: Users, label: 'Les Alters', image: '/images/avatars/nyx.png' },
