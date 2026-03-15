@@ -17,6 +17,7 @@ const shortcuts = [
   { path: '/admin/humeur', label: 'Suivi d\'humeur', icon: Heart, desc: 'Enregistrer les humeurs' },
   { path: '/admin/front', label: 'Front Tracker', icon: Activity, desc: 'Qui est au front ?' },
   { path: '/admin/relations', label: 'Relations', icon: GitBranch, desc: 'Graphe des relations' },
+  { path: '/admin/reglement', label: 'Règlement', icon: ScrollText, desc: 'Règles internes & sociales' },
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings, desc: 'Infos du système' },
 ];
 
