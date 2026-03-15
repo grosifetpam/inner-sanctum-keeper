@@ -34,6 +34,8 @@ import ManageFront from "./pages/admin/ManageFront";
 import ManageRelations from "./pages/admin/ManageRelations";
 import ManageSystem from "./pages/admin/ManageSystem";
 import ManageCartography from "./pages/admin/ManageCartography";
+import ManageRules from "./pages/admin/ManageRules";
+import RulesPage from "./pages/RulesPage";
 
 const queryClient = new QueryClient();
 
