@@ -35,6 +35,9 @@ import ManageRelations from "./pages/admin/ManageRelations";
 import ManageSystem from "./pages/admin/ManageSystem";
 import ManageCartography from "./pages/admin/ManageCartography";
 import ManageRules from "./pages/admin/ManageRules";
+import ManageGrounding from "./pages/admin/ManageGrounding";
+import ManageCrisisPlan from "./pages/admin/ManageCrisisPlan";
+import ManageWellbeing from "./pages/admin/ManageWellbeing";
 import RulesPage from "./pages/RulesPage";
 
 const queryClient = new QueryClient();
@@ -92,6 +95,9 @@ function AppRoutes() {
         <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
         <Route path="/admin/cartographie" element={<ProtectedRoute><ManageCartography /></ProtectedRoute>} />
         <Route path="/admin/reglement" element={<ProtectedRoute><ManageRules /></ProtectedRoute>} />
+        <Route path="/admin/ancrage" element={<ProtectedRoute><ManageGrounding /></ProtectedRoute>} />
+        <Route path="/admin/crise" element={<ProtectedRoute><ManageCrisisPlan /></ProtectedRoute>} />
+        <Route path="/admin/bien-etre" element={<ProtectedRoute><ManageWellbeing /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

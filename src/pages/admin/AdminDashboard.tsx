@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles, Compass, PenLine, MessageCircle, Eye, Palette, Music, CheckCircle2, Circle, Trophy, HelpCircle, ScrollText } from 'lucide-react';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, GitBranch, Settings, Sparkles, Compass, PenLine, MessageCircle, Eye, Palette, Music, CheckCircle2, Circle, Trophy, HelpCircle, ScrollText, Anchor, ShieldAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, containerVariants, itemVariants, AdminSectionCard } from '@/components/admin/AdminPageWrapper';
 import { useState, useEffect } from 'react';
@@ -18,6 +18,9 @@ const shortcuts = [
   { path: '/admin/front', label: 'Front Tracker', icon: Activity, desc: 'Qui est au front ?' },
   { path: '/admin/relations', label: 'Relations', icon: GitBranch, desc: 'Graphe des relations' },
   { path: '/admin/reglement', label: 'Règlement', icon: ScrollText, desc: 'Règles internes & sociales' },
+  { path: '/admin/ancrage', label: 'Ancrage', icon: Anchor, desc: 'Grounding & respiration' },
+  { path: '/admin/crise', label: 'Plan de crise', icon: ShieldAlert, desc: 'Sécurité & contacts' },
+  { path: '/admin/bien-etre', label: 'Bien-être', icon: Sparkles, desc: 'Self-care quotidien' },
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings, desc: 'Infos du système' },
 ];
 

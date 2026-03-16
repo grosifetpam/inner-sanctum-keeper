@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSystem } from '@/contexts/SystemContext';
 import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
-import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck, Volume2, VolumeX, ScrollText } from 'lucide-react';
+import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings, LogOut, Home, GitBranch, Brain, BookOpenCheck, Volume2, VolumeX, ScrollText, Anchor, ShieldAlert, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTurnTransition from '@/components/PageTurnTransition';
 import GrimoireOpening from '@/components/GrimoireOpening';
@@ -20,6 +20,9 @@ const adminNav = [
   { path: '/admin/relations', label: 'Relations', icon: GitBranch },
   { path: '/admin/cartographie', label: 'Cartographie', icon: Brain },
   { path: '/admin/reglement', label: 'Règlement', icon: ScrollText },
+  { path: '/admin/ancrage', label: 'Ancrage', icon: Anchor },
+  { path: '/admin/crise', label: 'Plan de crise', icon: ShieldAlert },
+  { path: '/admin/bien-etre', label: 'Bien-être', icon: Sparkles },
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings },
 ];
 
