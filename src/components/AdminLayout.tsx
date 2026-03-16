@@ -20,6 +20,9 @@ const adminNav = [
   { path: '/admin/relations', label: 'Relations', icon: GitBranch },
   { path: '/admin/cartographie', label: 'Cartographie', icon: Brain },
   { path: '/admin/reglement', label: 'Règlement', icon: ScrollText },
+  { path: '/admin/ancrage', label: 'Ancrage', icon: Anchor },
+  { path: '/admin/crise', label: 'Plan de crise', icon: ShieldAlert },
+  { path: '/admin/bien-etre', label: 'Bien-être', icon: Sparkles },
   { path: '/admin/systeme', label: 'Paramètres', icon: Settings },
 ];
 

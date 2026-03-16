@@ -95,6 +95,9 @@ function AppRoutes() {
         <Route path="/admin/systeme" element={<ProtectedRoute><ManageSystem /></ProtectedRoute>} />
         <Route path="/admin/cartographie" element={<ProtectedRoute><ManageCartography /></ProtectedRoute>} />
         <Route path="/admin/reglement" element={<ProtectedRoute><ManageRules /></ProtectedRoute>} />
+        <Route path="/admin/ancrage" element={<ProtectedRoute><ManageGrounding /></ProtectedRoute>} />
+        <Route path="/admin/crise" element={<ProtectedRoute><ManageCrisisPlan /></ProtectedRoute>} />
+        <Route path="/admin/bien-etre" element={<ProtectedRoute><ManageWellbeing /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
