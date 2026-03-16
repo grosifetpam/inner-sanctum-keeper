@@ -121,6 +121,73 @@ const exercises = [
       'Comment te manifestes-tu (sensations, pensées, émotions) ?',
     ],
   },
+  {
+    id: 'carte-identite',
+    title: 'Carte d\'identité d\'alter',
+    icon: Users,
+    duration: '15-20 min',
+    description: 'Créez une fiche d\'identité visuelle pour chaque alter : nom, âge, apparence, goûts, rôle. Un exercice structurant pour mieux se connaître.',
+    steps: [
+      'Prenez une feuille et divisez-la en sections (nom, âge, apparence, goûts)',
+      'Laissez l\'alter remplir chaque section à sa manière',
+      'Ajoutez un dessin ou symbole qui le/la représente',
+      'Notez un mot ou une phrase qui résume son essence',
+    ],
+  },
+  {
+    id: 'lettre-interieure',
+    title: 'Lettre à un alter',
+    icon: BookOpen,
+    duration: '15-25 min',
+    description: 'Écrivez une lettre à un alter que vous connaissez peu ou avec qui la relation est tendue. Exprimez vos ressentis et ouvrez le dialogue.',
+    steps: [
+      'Choisissez un alter à qui écrire',
+      'Commencez par "Cher/Chère [nom]..."',
+      'Exprimez ce que vous ressentez envers cet alter sans jugement',
+      'Invitez-le/la à répondre quand il/elle sera prêt(e)',
+      'Relisez la lettre le lendemain et notez si une réponse est venue',
+    ],
+  },
+  {
+    id: 'ancrage-sensoriel',
+    title: 'Ancrage sensoriel par alter',
+    icon: Compass,
+    duration: '10-20 min',
+    description: 'Identifiez les objets, odeurs, textures ou sons qui aident chaque alter à se sentir en sécurité ou à se manifester.',
+    steps: [
+      'Rassemblez divers objets sensoriels (tissu doux, pierre, bougie parfumée...)',
+      'Touchez/sentez chaque objet et observez les réactions intérieures',
+      'Notez quel alter réagit à quel stimulus',
+      'Créez un "kit sensoriel" pour chaque alter identifié',
+    ],
+  },
+  {
+    id: 'journal-switching',
+    title: 'Journal de switching',
+    icon: Activity,
+    duration: '5-10 min (quotidien)',
+    description: 'Notez chaque jour les moments de switch ou de co-conscience. Avec le temps, vous identifierez des patterns et déclencheurs.',
+    steps: [
+      'Gardez un petit carnet accessible en permanence',
+      'À chaque changement ressenti, notez l\'heure et le contexte',
+      'Décrivez brièvement qui était présent avant et après',
+      'En fin de semaine, relisez et cherchez des récurrences',
+    ],
+  },
+  {
+    id: 'meditation-rencontre',
+    title: 'Méditation de rencontre',
+    icon: Sparkles,
+    duration: '15-25 min',
+    description: 'Une méditation guidée pour rencontrer un alter dans un espace intérieur sécurisé. Idéal pour les premiers contacts.',
+    steps: [
+      'Installez-vous confortablement et fermez les yeux',
+      'Visualisez un lieu neutre et apaisant (jardin, pièce lumineuse...)',
+      'Invitez mentalement un alter à vous rejoindre dans cet espace',
+      'Observez sans forcer : apparence, énergie, émotions ressenties',
+      'Remerciez l\'alter pour sa présence avant de revenir',
+    ],
+  },
 ];
 
 const statVariants = {
