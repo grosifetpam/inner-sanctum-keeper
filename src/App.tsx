@@ -35,6 +35,9 @@ import ManageRelations from "./pages/admin/ManageRelations";
 import ManageSystem from "./pages/admin/ManageSystem";
 import ManageCartography from "./pages/admin/ManageCartography";
 import ManageRules from "./pages/admin/ManageRules";
+import ManageGrounding from "./pages/admin/ManageGrounding";
+import ManageCrisisPlan from "./pages/admin/ManageCrisisPlan";
+import ManageWellbeing from "./pages/admin/ManageWellbeing";
 import RulesPage from "./pages/RulesPage";
 
 const queryClient = new QueryClient();
