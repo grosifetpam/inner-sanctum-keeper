@@ -6,6 +6,7 @@ import { Users, BookOpen, Quote, Library, Map, Clock, Activity, Heart, Settings,
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTurnTransition from '@/components/PageTurnTransition';
 import GrimoireOpening from '@/components/GrimoireOpening';
+import ChatSupport from '@/components/ChatSupport';
 
 const adminNav = [
   { path: '/admin', label: 'Tableau de bord', icon: Home },
@@ -171,6 +172,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         </motion.div>
       </div>
+      <ChatSupport />
     </GrimoireOpening>
   );
 }
