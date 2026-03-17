@@ -19,6 +19,7 @@ const navItems = [
   { path: '/chronologie', label: 'Chronologie', icon: Clock },
   { path: '/cartographie', label: 'Cartographie', icon: Brain },
   { path: '/reglement', label: 'Règlement', icon: ScrollText },
+  { path: '/plan-de-crise', label: 'Plan de crise', icon: ShieldAlert },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

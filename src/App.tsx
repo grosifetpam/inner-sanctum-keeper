@@ -77,6 +77,7 @@ function AppRoutes() {
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
         <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
         <Route path="/reglement" element={<PublicRoute><RulesPage /></PublicRoute>} />
+        <Route path="/plan-de-crise" element={<PublicRoute><CrisisPlanPage /></PublicRoute>} />
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />
