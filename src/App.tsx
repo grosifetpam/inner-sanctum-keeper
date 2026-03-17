@@ -39,6 +39,7 @@ import ManageGrounding from "./pages/admin/ManageGrounding";
 import ManageCrisisPlan from "./pages/admin/ManageCrisisPlan";
 import ManageWellbeing from "./pages/admin/ManageWellbeing";
 import RulesPage from "./pages/RulesPage";
+import CrisisPlanPage from "./pages/CrisisPlanPage";
 
 const queryClient = new QueryClient();
 
