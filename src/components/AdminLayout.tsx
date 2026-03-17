@@ -172,6 +172,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         </motion.div>
       </div>
+      <ChatSupport />
     </GrimoireOpening>
   );
 }
