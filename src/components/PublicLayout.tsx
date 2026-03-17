@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTurnTransition from '@/components/PageTurnTransition';
-import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Brain, BookOpenCheck, Volume2, VolumeX, Shield, Menu, X, ScrollText } from 'lucide-react';
+import { Moon, BookOpen, Users, Map, Heart, Quote, Library, Clock, Brain, BookOpenCheck, Volume2, VolumeX, Shield, Menu, X, ScrollText, ShieldAlert } from 'lucide-react';
 import { playPageTurn, isSoundEnabled, toggleSound } from '@/lib/sounds';
 import GrimoireOpening from '@/components/GrimoireOpening';
 import AmbientParticles from '@/components/AmbientParticles';
@@ -19,6 +19,7 @@ const navItems = [
   { path: '/chronologie', label: 'Chronologie', icon: Clock },
   { path: '/cartographie', label: 'Cartographie', icon: Brain },
   { path: '/reglement', label: 'Règlement', icon: ScrollText },
+  { path: '/plan-de-crise', label: 'Plan de crise', icon: ShieldAlert },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

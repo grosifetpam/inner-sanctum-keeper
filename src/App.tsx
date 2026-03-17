@@ -39,6 +39,7 @@ import ManageGrounding from "./pages/admin/ManageGrounding";
 import ManageCrisisPlan from "./pages/admin/ManageCrisisPlan";
 import ManageWellbeing from "./pages/admin/ManageWellbeing";
 import RulesPage from "./pages/RulesPage";
+import CrisisPlanPage from "./pages/CrisisPlanPage";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ function AppRoutes() {
         <Route path="/chronologie" element={<PublicRoute><TimelinePage /></PublicRoute>} />
         <Route path="/cartographie" element={<PublicRoute><CartographyPage /></PublicRoute>} />
         <Route path="/reglement" element={<PublicRoute><RulesPage /></PublicRoute>} />
+        <Route path="/plan-de-crise" element={<PublicRoute><CrisisPlanPage /></PublicRoute>} />
 
         {/* Auth */}
         <Route path="/login" element={<LoginRoute />} />

@@ -125,6 +125,51 @@ export type Database = {
         }
         Relationships: []
       }
+      crisis_plans: {
+        Row: {
+          alter_guidelines: Json
+          avoid_list: string[]
+          coping_strategies: string[]
+          created_at: string
+          id: string
+          is_public: boolean
+          personal_affirmations: string[]
+          safe_actions: string[]
+          safe_contacts: Json
+          updated_at: string
+          user_id: string
+          warning_signals: string[]
+        }
+        Insert: {
+          alter_guidelines?: Json
+          avoid_list?: string[]
+          coping_strategies?: string[]
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          personal_affirmations?: string[]
+          safe_actions?: string[]
+          safe_contacts?: Json
+          updated_at?: string
+          user_id: string
+          warning_signals?: string[]
+        }
+        Update: {
+          alter_guidelines?: Json
+          avoid_list?: string[]
+          coping_strategies?: string[]
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          personal_affirmations?: string[]
+          safe_actions?: string[]
+          safe_contacts?: Json
+          updated_at?: string
+          user_id?: string
+          warning_signals?: string[]
+        }
+        Relationships: []
+      }
       exercise_completions: {
         Row: {
           completed_at: string
